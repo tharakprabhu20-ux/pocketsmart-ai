@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}PocketSmart AI | Smart Budget & Recommendation Assistant{% endblock %}</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22><text y=%2226%22 font-size=%2226%22>💳</text></svg>">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <a href="/" class="nav-brand">
+            <div class="brand-icon">💳</div>
+            <div>
+                <div class="brand-title">PocketSmart AI</div>
+                <div class="brand-subtitle">Smart Budget & Recommendation Assistant</div>
+            </div>
+        </a>
+
+        <div class="nav-links">
+            <a href="/" class="nav-link">🏠 Home</a>
+            <a href="/home-budget" class="nav-link">🛋️ Home Interior</a>
+            <a href="/party-budget" class="nav-link">🎉 Party Planner</a>
+            <a href="/jewelry-budget" class="nav-link">💎 Jewelry Stylist</a>
+            
+            {% if user %}
+                <a href="/dashboard" class="nav-link">📊 Dashboard</a>
+                <a href="/history" class="nav-link">📜 History</a>
+                <div class="nav-user">
+                    <span class="badge badge-success">👤 {{ user.full_name }}</span>
+                    <a href="/logout" class="btn btn-secondary btn-sm">Logout</a>
+                </div>
+            {% else %}
+                <a href="/login" class="btn btn-secondary btn-sm">Sign In</a>
+                <a href="/register" class="btn btn-primary btn-sm">Get Started</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="main-container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Comprehensive Footer Part -->
+    <footer class="footer-part">
+        <div class="footer-container">
+            <div class="footer-col">
+                <div class="nav-brand" style="margin-bottom: 16px;">
+                    <div class="brand-icon">💳</div>
+                    <div>
+                        <div class="brand-title">PocketSmart AI</div>
+                        <div class="brand-subtitle">Intelligent FinTech & AI Planning</div>
+                    </div>
+                </div>
+                <p style="color: var(--text-secondary); font-size: 13.5px; line-height: 1.6; max-width: 340px;">
+                    Empowering households, event hosts, and shoppers with deterministic budgeting, multimodal vision intelligence, and direct retail integrations.
+                </p>
+            </div>
+
+            <div class="footer-col">
+                <h4>AI Planners</h4>
+                <ul>
+                    <li><a href="/home-budget">🛋️ Home Interior Planner</a></li>
+                    <li><a href="/party-budget">🎉 Party & Event Planner</a></li>
+                    <li><a href="/jewelry-budget">💎 Jewelry & Outfit Stylist</a></li>
+                    <li><a href="/dashboard">📊 Financial Dashboard</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Retail Partners</h4>
+                <ul>
+                    <li><a href="https://www.amazon.in" target="_blank">Amazon & Flipkart</a></li>
+                    <li><a href="https://www.ikea.com" target="_blank">IKEA & Pepperfry</a></li>
+                    <li><a href="https://www.tanishq.co.in" target="_blank">Tanishq & CaratLane</a></li>
+                    <li><a href="https://www.swiggy.com" target="_blank">Swiggy & Zomato</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Security & Architecture</h4>
+                <p style="color: var(--text-secondary); font-size: 13px; line-height: 1.5; margin-bottom: 12px;">
+                    Powered by FastAPI, SQLite persistence, and Google Gemini Multimodal APIs with deterministic math validation.
+                </p>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <span class="badge badge-home">FastAPI 0.141</span>
+                    <span class="badge badge-party">Gemini Vision</span>
+                    <span class="badge badge-jewelry">Bcrypt Auth</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div>© 2026 PocketSmart AI. All rights reserved. Precision Budgeting & AI Solutions.</div>
+            <div>Built for High-Trust Enterprise & Consumer Financial Planning</div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+
+{% block title %}Party & Event Planner | PocketSmart AI{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 24px;">
+    <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+        <span class="badge badge-party">🎉 Event & Celebration Budgeting</span>
+        <span class="badge badge-success">Catering & Venue Integrations</span>
+    </div>
+    <h1 style="font-size: 28px; font-weight: 800;">Party, Wedding & Event Budget Planner</h1>
+    <p style="color: var(--text-secondary); font-size: 14px;">
+        Calculate guest allocations, catering options, decor themes, and contingency buffers with vendor search links for Swiggy, Zomato, OYO, and Booking.com.
+    </p>
+</div>
+
+<div class="grid-2" style="align-items: start; margin-bottom: 40px;">
+    <!-- Left Column: Input Form -->
+    <div class="glass-card">
+        <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 18px;">🎊 Event Logistics</h3>
+        
+        <form method="POST" action="/party-budget">
+            <div class="form-group">
+                <label class="form-label" for="budget">Total Event Budget</label>
+                <div style="display: flex; gap: 10px;">
+                    <select class="form-select" name="currency" id="currency" style="width: 120px;">
+                        <option value="INR" {% if form_data.currency == 'INR' or not form_data.currency %}selected{% endif %}>₹ INR</option>
+                        <option value="USD" {% if form_data.currency == 'USD' %}selected{% endif %}>$ USD</option>
+                        <option value="EUR" {% if form_data.currency == 'EUR' %}selected{% endif %}>€ EUR</option>
+                        <option value="GBP" {% if form_data.currency == 'GBP' %}selected{% endif %}>£ GBP</option>
+                        <option value="AED" {% if form_data.currency == 'AED' %}selected{% endif %}>AED</option>
+                    </select>
+                    <input class="form-input" type="number" id="budget" name="budget" min="1000" step="500" value="{{ form_data.budget or 50000 }}" required>
+                </div>
+            </div>
+
+            <div class="grid-2" style="gap: 14px;">
+                <div class="form-group">
+                    <label class="form-label" for="event_type">Event Occasion</label>
+                    <select class="form-select" name="event_type" id="event_type">
+                        <option value="Birthday Party" {% if form_data.event_type == 'Birthday Party' %}selected{% endif %}>Birthday Celebration</option>
+                        <option value="Engagement / Anniversary" {% if form_data.event_type == 'Engagement / Anniversary' %}selected{% endif %}>Engagement / Anniversary</option>
+                        <option value="Housewarming Gala" {% if form_data.event_type == 'Housewarming Gala' %}selected{% endif %}>Housewarming Party</option>
+                        <option value="Corporate Mixer" {% if form_data.event_type == 'Corporate Mixer' %}selected{% endif %}>Corporate Team Mixer</option>
+                        <option value="Bachelor / Bachelorette" {% if form_data.event_type == 'Bachelor / Bachelorette' %}selected{% endif %}>Bachelor / Bachelorette</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="guest_count">Guest Headcount</label>
+                    <input class="form-input" type="number" id="guest_count" name="guest_count" min="2" max="500" value="{{ form_data.guest_count or 25 }}" required>
+                </div>
+            </div>
+
+            <div class="grid-2" style="gap: 14px;">
+                <div class="form-group">
+                    <label class="form-label" for="venue_type">Venue Type</label>
+                    <select class="form-select" name="venue_type" id="venue_type">
+                        <option value="Rooftop Lounge / Banquet" {% if form_data.venue_type == 'Rooftop Lounge / Banquet' %}selected{% endif %}>Rooftop Lounge / Banquet</option>
+                        <option value="Home / Apartment Clubhouse" {% if form_data.venue_type == 'Home / Apartment Clubhouse' %}selected{% endif %}>Clubhouse / Residence</option>
+                        <option value="Resort / Private Villa" {% if form_data.venue_type == 'Resort / Private Villa' %}selected{% endif %}>Resort / Private Villa</option>
+                        <option value="Outdoor Lawn / Poolside" {% if form_data.venue_type == 'Outdoor Lawn / Poolside' %}selected{% endif %}>Outdoor Lawn / Poolside</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="catering_style">Catering Style</label>
+                    <select class="form-select" name="catering_style" id="catering_style">
+                        <option value="Live Buffet & Mocktails" {% if form_data.catering_style == 'Live Buffet & Mocktails' %}selected{% endif %}>Live Buffet & Mocktails</option>
+                        <option value="Finger Foods & Appetizers" {% if form_data.catering_style == 'Finger Foods & Appetizers' %}selected{% endif %}>Finger Foods & Appetizers</option>
+                        <option value="3-Course Plated Dinner" {% if form_data.catering_style == '3-Course Plated Dinner' %}selected{% endif %}>3-Course Plated Dinner</option>
+                        <option value="BBQ & Grill Stations" {% if form_data.catering_style == 'BBQ & Grill Stations' %}selected{% endif %}>BBQ & Grill Stations</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Entertainment & Add-ons</label>
+                <div class="checkbox-group">
+                    <label class="checkbox-card">
+                        <input type="checkbox" name="entertainment" value="DJ & Sound System" checked>
+                        <span>DJ & Sound System</span>
+                    </label>
+                    <label class="checkbox-card">
+                        <input type="checkbox" name="entertainment" value="Professional Photographer" checked>
+                        <span>Photographer</span>
+                    </label>
+                    <label class="checkbox-card">
+                        <input type="checkbox" name="entertainment" value="Custom Balloon / Floral Decor" checked>
+                        <span>Theme Decor</span>
+                    </label>
+                    <label class="checkbox-card">
+                        <input type="checkbox" name="entertainment" value="Custom Designer Cake">
+                        <span>Designer Cake</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="notes">Special Requirements</label>
+                <textarea class="form-textarea" id="notes" name="special_requirements" rows="2" placeholder="e.g. Vegetarian only, neon theme, photo booth...">{{ form_data.special_requirements or '' }}</textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">🚀 Generate AI Event Budget Breakdown</button>
+        </form>
+    </div>
+
+    <!-- Right Column: Result Presentation -->
+    <div>
+        {% if plan_result %}
+        <div class="glass-card" style="border-color: rgba(245, 158, 11, 0.4); margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
+                <div>
+                    <span class="badge badge-party">Event Blueprint</span>
+                    <h2 style="font-size: 22px; font-weight: 800; margin-top: 6px;">{{ plan_result.event_title }}</h2>
+                </div>
+                <div style="text-align: right;">
+                    <div style="font-size: 11px; color: var(--text-secondary); text-transform: uppercase;">Per Head Estimate</div>
+                    <div style="font-size: 22px; font-weight: 800; color: #FBBF24;">{{ plan_result.currency }} {{ "{:,.2f}".format(plan_result.per_guest_cost) }}</div>
+                </div>
+            </div>
+
+            <p style="color: var(--text-secondary); font-size: 13.5px; line-height: 1.6; margin-bottom: 16px;">
+                {{ plan_result.summary }}
+            </p>
+
+            <div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;">
+                <div style="background: rgba(15, 23, 42, 0.6); padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border-glass);">
+                    <div style="font-size: 11px; color: var(--text-secondary); text-transform: uppercase;">Total Budget</div>
+                    <div style="font-weight: 800; font-size: 16px; color: #F8FAFC;">{{ plan_result.currency }} {{ "{:,.2f}".format(plan_result.total_estimated_cost) }}</div>
+                </div>
+                <div style="background: rgba(15, 23, 42, 0.6); padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border-glass);">
+                    <div style="font-size: 11px; color: var(--text-secondary); text-transform: uppercase;">Contingency Fund</div>
+                    <div style="font-weight: 800; font-size: 16px; color: #34D399;">{{ plan_result.currency }} {{ "{:,.2f}".format(plan_result.contingency_fund or 0.0) }}</div>
+                </div>
+            </div>
+
+            <!-- Categories Breakdown -->
+            <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 12px;">Categorized Allocations & Vendor Links</h3>
+            {% for cat in plan_result.categories %}
+            <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid var(--border-glass); border-radius: 14px; padding: 16px; margin-bottom: 16px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <h4 style="font-size: 15px; font-weight: 700;">🍽️ {{ cat.category_name }}</h4>
+                    <span class="badge badge-party">{{ plan_result.currency }} {{ "{:,.2f}".format(cat.allocated_amount) }} ({{ cat.percentage }}%)</span>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    {% for item in cat.line_items %}
+                    <div style="background: rgba(30, 41, 59, 0.6); padding: 12px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.05);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                            <div style="font-weight: 700; font-size: 13.5px;">{{ item.item_name }}</div>
+                            <div style="font-weight: 800; color: #F8FAFC;">{{ plan_result.currency }} {{ "{:,.2f}".format(item.estimated_cost) }}</div>
+                        </div>
+                        <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 8px;">Vendor hint: {{ item.vendor_suggestion }}</div>
+                        
+                        <div style="display: flex; align-items: center; gap: 4px; flex-wrap: wrap;">
+                            <span style="font-size: 11px; color: var(--text-muted); margin-right: 4px;">Explore on:</span>
+                            {% for link in item.shopping_links %}
+                            <a href="{{ link.url }}" target="_blank" class="retail-link-pill">{{ link.icon }} {{ link.platform }}</a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+
+            <!-- Timeline -->
+            {% if plan_result.timeline_schedule %}
+            <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-glass); border-radius: 12px; padding: 16px; margin-top: 20px;">
+                <div style="font-size: 13px; font-weight: 800; text-transform: uppercase; margin-bottom: 10px;">⏰ Suggested Event Schedule</div>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    {% for slot in plan_result.timeline_schedule %}
+                    <div style="display: flex; gap: 14px; font-size: 13px;">
+                        <span style="font-weight: 700; color: #FBBF24; width: 80px;">{{ slot.time }}</span>
+                        <span style="color: var(--text-secondary);">{{ slot.activity }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        {% else %}
+        <!-- Initial Guidance Card -->
+        <div class="glass-card" style="text-align: center; padding: 48px 24px;">
+            <div style="font-size: 48px; margin-bottom: 16px;">🎉</div>
+            <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 8px;">Ready to Plan Your Event</h3>
+            <p style="color: var(--text-secondary); font-size: 13.5px; max-width: 400px; margin: 0 auto 20px auto; line-height: 1.6;">
+                Specify your guest count and catering preferences on the left to receive a fully itemized per-head financial schedule with Swiggy and OYO venue links.
+            </p>
+            <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+                <span class="badge">Swiggy Gourmet</span>
+                <span class="badge">Zomato Catering</span>
+                <span class="badge">OYO Venues</span>
+                <span class="badge">Booking.com</span>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

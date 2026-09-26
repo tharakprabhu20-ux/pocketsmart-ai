@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% block title %}{{ plan.title }} | PocketSmart AI{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 24px;">
+    <a href="/history" class="btn btn-secondary btn-sm" style="margin-bottom: 12px;">← Back to History</a>
+    <div style="display: flex; justify-content: space-between; align-items: start; flex-wrap: wrap; gap: 16px;">
+        <div>
+            <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                {% if plan.module_type == 'home' %}
+                    <span class="badge badge-home">🛋️ Home Interior Plan</span>
+                {% elif plan.module_type == 'party' %}
+                    <span class="badge badge-party">🎉 Party & Event Plan</span>
+                {% elif plan.module_type == 'jewelry' %}
+                    <span class="badge badge-jewelry">💎 Jewelry & Outfit Styling</span>
+                {% endif %}
+                <span class="badge badge-success">Saved Log #{{ plan.id }}</span>
+            </div>
+            <h1 style="font-size: 28px; font-weight: 800;">{{ plan.title }}</h1>
+            <p style="color: var(--text-secondary); font-size: 13.5px;">Generated on {{ plan.created_at }}</p>
+        </div>
+
+        <div style="text-align: right;">
+            <div style="font-size: 11px; color: var(--text-secondary); text-transform: uppercase;">Total Budget Allocation</div>
+            <div style="font-size: 26px; font-weight: 800; color: #38BDF8;">{{ plan.currency }} {{ "{:,.2f}".format(plan.budget) }}</div>
+        </div>
+    </div>
+</div>
+
+<!-- Plan Details Content -->
+<div class="glass-card" style="margin-bottom: 30px;">
+    {% if plan.image_path %}
+    <div style="text-align: center; margin-bottom: 20px;">
+        <img src="/static/uploads/{{ plan.image_path }}" alt="Outfit Image" style="max-height: 220px; border-radius: 14px; border: 1px solid var(--border-glass);">
+    </div>
+    {% endif %}
+
+    {% if details.summary %}
+    <div style="margin-bottom: 24px;">
+        <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 6px;">Executive Plan Overview</h3>
+        <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.6;">{{ details.summary }}</p>
+    </div>
+    {% endif %}
+
+    {% if details.outfit_analysis %}
+    <div style="margin-bottom: 24px;">
+        <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 6px;">Outfit Color & Neckline Analysis</h3>
+        <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.6;">{{ details.outfit_analysis }}</p>
+    </div>
+    {% endif %}
+
+    <!-- HOME INTERIOR ROOMS -->
+    {% if details.room_breakdown %}
+    <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 16px;">Room-by-Room Allocations</h3>
+    {% for room in details.room_breakdown %}
+    <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-glass); border-radius: 14px; padding: 18px; margin-bottom: 18px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <h4 style="font-size: 16px; font-weight: 700;">🏠 {{ room.room_name }}</h4>
+            <span class="badge badge-success">{{ plan.currency }} {{ "{:,.2f}".format(room.allocated_budget) }}</span>
+        </div>
+        <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Color Palette: <b>{{ room.color_palette }}</b></div>
+
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+            {% for item in room.items %}
+            <div style="background: rgba(30, 41, 59, 0.7); padding: 12px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.05);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                    <div style="font-weight: 700; font-size: 14px;">{{ item.item_name }}</div>
+                    <div style="font-weight: 800;">{{ plan.currency }} {{ "{:,.2f}".format(item.estimated_cost) }}</div>
+                </div>
+                <div style="font-size: 12.5px; color: var(--text-secondary); margin-bottom: 8px;">{{ item.recommendation_tip }}</div>
+                
+                <div style="display: flex; align-items: center; gap: 4px; flex-wrap: wrap;">
+                    <span style="font-size: 11px; color: var(--text-muted); margin-right: 4px;">Shop on:</span>
+                    {% for link in item.shopping_links %}
+                    <a href="{{ link.url }}" target="_blank" class="retail-link-pill">{{ link.icon }} {{ link.platform }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <!-- PARTY CATEGORIES -->
+    {% if details.categories %}
+    <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 16px;">Categorized Event Allocations</h3>
+    {% for cat in details.categories %}
+    <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-glass); border-radius: 14px; padding: 18px; margin-bottom: 18px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <h4 style="font-size: 16px; font-weight: 700;">🍽️ {{ cat.category_name }}</h4>
+            <span class="badge badge-party">{{ plan.currency }} {{ "{:,.2f}".format(cat.allocated_amount) }} ({{ cat.percentage }}%)</span>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+            {% for item in cat.line_items %}
+            <div style="background: rgba(30, 41, 59, 0.7); padding: 12px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.05);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                    <div style="font-weight: 700; font-size: 14px;">{{ item.item_name }}</div>
+                    <div style="font-weight: 800;">{{ plan.currency }} {{ "{:,.2f}".format(item.estimated_cost) }}</div>
+                </div>
+                <div style="font-size: 12.5px; color: var(--text-secondary); margin-bottom: 8px;">Vendor: {{ item.vendor_suggestion }}</div>
+                
+                <div style="display: flex; align-items: center; gap: 4px; flex-wrap: wrap;">
+                    <span style="font-size: 11px; color: var(--text-muted); margin-right: 4px;">Explore on:</span>
+                    {% for link in item.shopping_links %}
+                    <a href="{{ link.url }}" target="_blank" class="retail-link-pill">{{ link.icon }} {{ link.platform }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <!-- JEWELRY PIECES -->
+    {% if details.recommended_pieces %}
+    <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 16px;">Curated Fine Jewelry Collection</h3>
+    <div style="display: flex; flex-direction: column; gap: 14px;">
+        {% for piece in details.recommended_pieces %}
+        <div style="background: rgba(15, 23, 42, 0.6); padding: 16px; border-radius: 12px; border: 1px solid var(--border-glass);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <div style="font-weight: 800; font-size: 15px; color: #F8FAFC;">{{ piece.piece_name }}</div>
+                <span class="badge badge-jewelry">{{ plan.currency }} {{ "{:,.2f}".format(piece.estimated_cost) }}</span>
+            </div>
+            <div style="font-size: 12.5px; color: #C084FC; font-weight: 600; margin-bottom: 6px;">{{ piece.metal_gem_details }}</div>
+            <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.5;">{{ piece.style_rationale }}</div>
+
+            <div style="display: flex; align-items: center; gap: 4px; flex-wrap: wrap;">
+                <span style="font-size: 11px; color: var(--text-muted); margin-right: 4px;">Shop brands:</span>
+                {% for link in piece.shopping_links %}
+                <a href="{{ link.url }}" target="_blank" class="retail-link-pill">{{ link.icon }} {{ link.platform }}</a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+
+{% block title %}Jewelry & Outfit Stylist | PocketSmart AI{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 24px;">
+    <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+        <span class="badge badge-jewelry">💎 Multimodal Vision & Fine Jewelry</span>
+        <span class="badge badge-success">Tanishq & CaratLane Search Enabled</span>
+    </div>
+    <h1 style="font-size: 28px; font-weight: 800;">Jewelry & Outfit Styling Budget Assistant</h1>
+    <p style="color: var(--text-secondary); font-size: 14px;">
+        Upload your outfit image or specify your attire. Gemini Multimodal Vision coordinates harmonious jewelry pieces within your exact budget ceiling.
+    </p>
+</div>
+
+<div class="grid-2" style="align-items: start; margin-bottom: 40px;">
+    <!-- Left Column: Input Form with Drag-and-Drop Image Upload -->
+    <div class="glass-card">
+        <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 18px;">✨ Styling Preferences</h3>
+        
+        <form method="POST" action="/jewelry-budget" enctype="multipart/form-data">
+            <div class="form-group">
+                <label class="form-label" for="budget">Jewelry Budget Limit</label>
+                <div style="display: flex; gap: 10px;">
+                    <select class="form-select" name="currency" id="currency" style="width: 120px;">
+                        <option value="INR" {% if form_data.currency == 'INR' or not form_data.currency %}selected{% endif %}>₹ INR</option>
+                        <option value="USD" {% if form_data.currency == 'USD' %}selected{% endif %}>$ USD</option>
+                        <option value="EUR" {% if form_data.currency == 'EUR' %}selected{% endif %}>€ EUR</option>
+                        <option value="GBP" {% if form_data.currency == 'GBP' %}selected{% endif %}>£ GBP</option>
+                        <option value="AED" {% if form_data.currency == 'AED' %}selected{% endif %}>AED</option>
+                    </select>
+                    <input class="form-input" type="number" id="budget" name="budget" min="500" step="500" value="{{ form_data.budget or 45000 }}" required>
+                </div>
+            </div>
+
+            <!-- Optional Outfit Photo Upload -->
+            <div class="form-group">
+                <label class="form-label" for="outfit_image">📷 Upload Outfit Photo (Optional)</label>
+                <input class="form-input" type="file" id="outfit_image" name="outfit_image" accept="image/png, image/jpeg, image/webp" style="padding: 8px;">
+                <span style="font-size: 11.5px; color: var(--text-muted); display: block; margin-top: 4px;">
+                    Supports PNG, JPG, WEBP. Gemini vision analyzes fabric colors, embroidery, and necklines.
+                </span>
+            </div>
+
+            <div class="grid-2" style="gap: 14px;">
+                <div class="form-group">
+                    <label class="form-label" for="occasion">Occasion</label>
+                    <select class="form-select" name="occasion" id="occasion">
+                        <option value="Wedding / Reception" {% if form_data.occasion == 'Wedding / Reception' %}selected{% endif %}>Wedding / Reception</option>
+                        <option value="Cocktail / Evening Gala" {% if form_data.occasion == 'Cocktail / Evening Gala' %}selected{% endif %}>Cocktail / Evening Gala</option>
+                        <option value="Festive Diwali / Eid" {% if form_data.occasion == 'Festive Diwali / Eid' %}selected{% endif %}>Festive (Diwali / Eid)</option>
+                        <option value="Daily Office Wear" {% if form_data.occasion == 'Daily Office Wear' %}selected{% endif %}>Daily / Workwear Minimal</option>
+                        <option value="Anniversary Date" {% if form_data.occasion == 'Anniversary Date' %}selected{% endif %}>Anniversary / Date Night</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="metal_preference">Metal & Stone Finish</label>
+                    <select class="form-select" name="metal_preference" id="metal_preference">
+                        <option value="18k / 22k Yellow Gold" {% if form_data.metal_preference == '18k / 22k Yellow Gold' %}selected{% endif %}>22k Traditional Yellow Gold</option>
+                        <option value="Rose Gold & CZ Diamonds" {% if form_data.metal_preference == 'Rose Gold & CZ Diamonds' %}selected{% endif %}>Rose Gold & Diamonds</option>
+                        <option value="925 Sterling Silver" {% if form_data.metal_preference == '925 Sterling Silver' %}selected{% endif %}>925 Sterling Silver</option>
+                        <option value="Kundan / Polki Fusion" {% if form_data.metal_preference == 'Kundan / Polki Fusion' %}selected{% endif %}>Kundan & Polki Fusion</option>
+                        <option value="Platinum & Solitaires" {% if form_data.metal_preference == 'Platinum & Solitaires' %}selected{% endif %}>Platinum & Solitaires</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Jewelry Pieces Needed</label>
+                <div class="checkbox-group">
+                    <label class="checkbox-card">
+                        <input type="checkbox" name="jewelry_types" value="Earrings / Jhumkas" checked>
+                        <span>Earrings / Jhumkas</span>
+                    </label>
+                    <label class="checkbox-card">
+                        <input type="checkbox" name="jewelry_types" value="Necklace / Choker" checked>
+                        <span>Necklace / Choker</span>
+                    </label>
+                    <label class="checkbox-card">
+                        <input type="checkbox" name="jewelry_types" value="Bracelet / Bangles" checked>
+                        <span>Bracelet / Bangles</span>
+                    </label>
+                    <label class="checkbox-card">
+                        <input type="checkbox" name="jewelry_types" value="Statement Ring">
+                        <span>Statement Ring</span>
+                    </label>
+                    <label class="checkbox-card">
+                        <input type="checkbox" name="jewelry_types" value="Maang Tikka / Hair Pin">
+                        <span>Maang Tikka</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="outfit_desc">Outfit Description / Color Details</label>
+                <textarea class="form-textarea" id="outfit_desc" name="outfit_description" rows="2" placeholder="e.g., Emerald green silk saree with gold zari border and deep square neckline...">{{ form_data.outfit_description or '' }}</textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">🚀 Coordinate Matching Jewelry with AI</button>
+        </form>
+    </div>
+
+    <!-- Right Column: Result Presentation -->
+    <div>
+        {% if plan_result %}
+        <div class="glass-card" style="border-color: rgba(168, 85, 247, 0.4); margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
+                <div>
+                    <span class="badge badge-jewelry">Stylist Curation</span>
+                    <h2 style="font-size: 22px; font-weight: 800; margin-top: 6px;">{{ plan_result.style_theme }}</h2>
+                </div>
+                <div style="text-align: right;">
+                    <div style="font-size: 11px; color: var(--text-secondary); text-transform: uppercase;">Total Estimated</div>
+                    <div style="font-size: 22px; font-weight: 800; color: #C084FC;">{{ plan_result.currency }} {{ "{:,.2f}".format(plan_result.total_estimated_cost) }}</div>
+                </div>
+            </div>
+
+            {% if image_url %}
+            <div style="margin-bottom: 14px; text-align: center;">
+                <img src="{{ image_url }}" alt="Uploaded Outfit" style="max-height: 180px; border-radius: 12px; border: 1px solid var(--border-glass);">
+            </div>
+            {% endif %}
+
+            <p style="color: var(--text-secondary); font-size: 13.5px; line-height: 1.6; margin-bottom: 16px;">
+                <b>Vision Match:</b> {{ plan_result.outfit_analysis }}
+            </p>
+
+            <!-- Recommended Pieces -->
+            <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 12px;">Curated Jewelry Pieces</h3>
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+                {% for piece in plan_result.recommended_pieces %}
+                <div style="background: rgba(15, 23, 42, 0.6); padding: 14px; border-radius: 12px; border: 1px solid var(--border-glass);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                        <div style="font-weight: 800; font-size: 14px; color: #F8FAFC;">{{ piece.piece_name }}</div>
+                        <span class="badge badge-jewelry">{{ plan_result.currency }} {{ "{:,.2f}".format(piece.estimated_cost) }}</span>
+                    </div>
+                    
+                    <div style="font-size: 12px; color: #C084FC; font-weight: 600; margin-bottom: 6px;">{{ piece.metal_gem_details }}</div>
+                    <div style="font-size: 12.5px; color: var(--text-secondary); margin-bottom: 10px; line-height: 1.4;">{{ piece.style_rationale }}</div>
+
+                    <div style="display: flex; align-items: center; gap: 4px; flex-wrap: wrap;">
+                        <span style="font-size: 11px; color: var(--text-muted); margin-right: 4px;">Shop brands:</span>
+                        {% for link in piece.shopping_links %}
+                        <a href="{{ link.url }}" target="_blank" class="retail-link-pill">{{ link.icon }} {{ link.platform }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Pro Tips -->
+            {% if plan_result.styling_pro_tips %}
+            <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-glass); border-radius: 12px; padding: 14px; margin-top: 20px;">
+                <div style="font-size: 12px; font-weight: 800; color: #FBBF24; text-transform: uppercase; margin-bottom: 6px;">💡 Stylist Pro Tips</div>
+                <ul style="padding-left: 18px; font-size: 13px; color: var(--text-secondary); line-height: 1.5;">
+                    {% for tip in plan_result.styling_pro_tips %}
+                    <li>{{ tip }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+        {% else %}
+        <!-- Initial Guidance Card -->
+        <div class="glass-card" style="text-align: center; padding: 48px 24px;">
+            <div style="font-size: 48px; margin-bottom: 16px;">💎</div>
+            <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 8px;">Find Your Perfect Jewelry Match</h3>
+            <p style="color: var(--text-secondary); font-size: 13.5px; max-width: 400px; margin: 0 auto 20px auto; line-height: 1.6;">
+                Upload a photo of your dress or lehenga to see Gemini evaluate your colors and curate matching Tanishq, CaratLane, and Melorra brand pieces.
+            </p>
+            <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+                <span class="badge">Tanishq</span>
+                <span class="badge">CaratLane</span>
+                <span class="badge">Bluestone</span>
+                <span class="badge">Melorra</span>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

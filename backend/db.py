@@ -1,6 +1,9 @@
 """
 Database Layer for PocketSmart AI.
-Provides thread-safe, idempotent SQLite persistence for user financial profiles and transactions.
+Provides thread-safe, idempotent SQLite persistence for:
+1. User authentication and multi-user accounts
+2. Baseline income and transaction ledgers (with backwards compatibility for existing single-user helpers)
+3. Specialized Planner recommendations & session history (Home Interior, Party, Jewelry)
 """
 
 import sqlite3
@@ -23,7 +26,18 @@ def init_db(db_path: str = DB_PATH) -> None:
     with get_connection(db_path) as conn:
         cursor = conn.cursor()
         
-        # User profile table (singleton id=1)
+        # 1. Users table for authentication
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                email TEXT UNIQUE NOT NULL,
+                full_name TEXT NOT NULL,
+                hashed_password TEXT NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+        
+        # 2. User profile table (singleton id=1 for backwards compatibility with budget engine)
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS user_profile (
                 id INTEGER PRIMARY KEY CHECK (id = 1),
@@ -32,16 +46,33 @@ def init_db(db_path: str = DB_PATH) -> None:
             )
         """)
         
-        # Transactions ledger table
+        # 3. Transactions ledger table
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS transactions (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER DEFAULT 1,
                 date TEXT NOT NULL,
                 merchant TEXT NOT NULL,
                 item_name TEXT NOT NULL,
                 amount REAL NOT NULL,
                 category TEXT NOT NULL CHECK (category IN ('Needs', 'Wants', 'Savings')),
                 receipt_id TEXT
+            )
+        """)
+        
+        # 4. Recommendation History table (for Home, Party, Jewelry planners)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS recommendations (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER DEFAULT 1,
+                module_type TEXT NOT NULL, -- 'home', 'party', 'jewelry'
+                title TEXT NOT NULL,
+                budget REAL NOT NULL,
+                currency TEXT NOT NULL DEFAULT 'INR',
+                user_inputs_json TEXT NOT NULL,
+                plan_result_json TEXT NOT NULL,
+                image_path TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """)
         
@@ -52,6 +83,116 @@ def init_db(db_path: str = DB_PATH) -> None:
             
         conn.commit()
 
+
+# =========================================================================
+# User Management Functions
+# =========================================================================
+
+def create_user(email: str, full_name: str, hashed_password: str, db_path: str = DB_PATH) -> Optional[Dict[str, Any]]:
+    """Creates a new registered user in SQLite."""
+    init_db(db_path)
+    with get_connection(db_path) as conn:
+        cursor = conn.cursor()
+        try:
+            cursor.execute("""
+                INSERT INTO users (email, full_name, hashed_password)
+                VALUES (?, ?, ?)
+            """, (email.strip().lower(), full_name.strip(), hashed_password))
+            conn.commit()
+            user_id = cursor.lastrowid
+            return {"id": user_id, "email": email.strip().lower(), "full_name": full_name.strip()}
+        except sqlite3.IntegrityError:
+            return None
+
+
+def get_user_by_email(email: str, db_path: str = DB_PATH) -> Optional[Dict[str, Any]]:
+    """Retrieves user by lowercase email."""
+    init_db(db_path)
+    with get_connection(db_path) as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, email, full_name, hashed_password, created_at FROM users WHERE email = ?", (email.strip().lower(),))
+        row = cursor.fetchone()
+        return dict(row) if row else None
+
+
+def get_user_by_id(user_id: int, db_path: str = DB_PATH) -> Optional[Dict[str, Any]]:
+    """Retrieves user by user ID."""
+    init_db(db_path)
+    with get_connection(db_path) as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, email, full_name, created_at FROM users WHERE id = ?", (user_id,))
+        row = cursor.fetchone()
+        return dict(row) if row else None
+
+
+# =========================================================================
+# Recommendation & Planner History Functions
+# =========================================================================
+
+def save_recommendation(
+    module_type: str,
+    title: str,
+    budget: float,
+    currency: str,
+    user_inputs_json: str,
+    plan_result_json: str,
+    user_id: int = 1,
+    image_path: Optional[str] = None,
+    db_path: str = DB_PATH
+) -> int:
+    """Saves an AI-generated budget recommendation plan to history."""
+    init_db(db_path)
+    with get_connection(db_path) as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+            INSERT INTO recommendations (user_id, module_type, title, budget, currency, user_inputs_json, plan_result_json, image_path)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        """, (user_id, module_type, title, float(budget), currency, user_inputs_json, plan_result_json, image_path))
+        conn.commit()
+        return cursor.lastrowid
+
+
+def get_recommendations_by_user(user_id: Optional[int] = None, module_type: Optional[str] = None, limit: int = 50, db_path: str = DB_PATH) -> List[Dict[str, Any]]:
+    """Fetches recommendation history logs, ordered newest first."""
+    init_db(db_path)
+    with get_connection(db_path) as conn:
+        cursor = conn.cursor()
+        query = "SELECT id, user_id, module_type, title, budget, currency, user_inputs_json, plan_result_json, image_path, created_at FROM recommendations"
+        params = []
+        conditions = []
+        if user_id is not None:
+            conditions.append("user_id = ?")
+            params.append(user_id)
+        if module_type is not None:
+            conditions.append("module_type = ?")
+            params.append(module_type)
+        if conditions:
+            query += " WHERE " + " AND ".join(conditions)
+        query += " ORDER BY id DESC LIMIT ?"
+        params.append(limit)
+        
+        cursor.execute(query, tuple(params))
+        rows = cursor.fetchall()
+        return [dict(row) for row in rows]
+
+
+def get_recommendation_by_id(rec_id: int, db_path: str = DB_PATH) -> Optional[Dict[str, Any]]:
+    """Retrieves single recommendation entry by primary key."""
+    init_db(db_path)
+    with get_connection(db_path) as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT id, user_id, module_type, title, budget, currency, user_inputs_json, plan_result_json, image_path, created_at
+            FROM recommendations
+            WHERE id = ?
+        """, (rec_id,))
+        row = cursor.fetchone()
+        return dict(row) if row else None
+
+
+# =========================================================================
+# Legacy / Budget Engine Functions
+# =========================================================================
 
 def set_user_income(income: float, db_path: str = DB_PATH) -> None:
     """Updates or sets monthly baseline income for the user."""

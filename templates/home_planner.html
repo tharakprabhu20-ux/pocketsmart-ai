@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+
+{% block title %}Home Interior Planner | PocketSmart AI{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 24px;">
+    <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+        <span class="badge badge-home">🛋️ Interior Architecture & Budgeting</span>
+        <span class="badge badge-success">Direct Retail Search Enabled</span>
+    </div>
+    <h1 style="font-size: 28px; font-weight: 800;">Home Interior & Decor Budget Planner</h1>
+    <p style="color: var(--text-secondary); font-size: 14px;">
+        Configure room selectors, furniture pieces, and lighting fixtures. Gemini generates a balanced room-by-room cost breakdown with Amazon, IKEA, and Flipkart shopping links.
+    </p>
+</div>
+
+<div class="grid-2" style="align-items: start; margin-bottom: 40px;">
+    <!-- Left Column: Input Form -->
+    <div class="glass-card">
+        <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 18px;">📋 Project Specifications</h3>
+        
+        <form method="POST" action="/home-budget">
+            <div class="form-group">
+                <label class="form-label" for="budget">Total Interior Budget</label>
+                <div style="display: flex; gap: 10px;">
+                    <select class="form-select" name="currency" id="currency" style="width: 120px;">
+                        <option value="INR" {% if form_data.currency == 'INR' or not form_data.currency %}selected{% endif %}>₹ INR</option>
+                        <option value="USD" {% if form_data.currency == 'USD' %}selected{% endif %}>$ USD</option>
+                        <option value="EUR" {% if form_data.currency == 'EUR' %}selected{% endif %}>€ EUR</option>
+                        <option value="GBP" {% if form_data.currency == 'GBP' %}selected{% endif %}>£ GBP</option>
+                        <option value="AED" {% if form_data.currency == 'AED' %}selected{% endif %}>AED</option>
+                    </select>
+                    <input class="form-input" type="number" id="budget" name="budget" min="1000" step="500" value="{{ form_data.budget or 150000 }}" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Select Rooms to Furnish</label>
+                <div class="checkbox-group">
+                    <label class="checkbox-card">
+                        <input type="checkbox" name="rooms" value="Living Room" {% if 'Living Room' in form_data.rooms or not form_data.rooms %}checked{% endif %}>
+                        <span>Living Room</span>
+                    </label>
+                    <label class="checkbox-card">
+                        <input type="checkbox" name="rooms" value="Master Bedroom" {% if 'Master Bedroom' in form_data.rooms or not form_data.rooms %}checked{% endif %}>
+                        <span>Master Bedroom</span>
+                    </label>
+                    <label class="checkbox-card">
+                        <input type="checkbox" name="rooms" value="Modular Kitchen" {% if 'Modular Kitchen' in form_data.rooms %}checked{% endif %}>
+                        <span>Modular Kitchen</span>
+                    </label>
+                    <label class="checkbox-card">
+                        <input type="checkbox" name="rooms" value="Dining Area" {% if 'Dining Area' in form_data.rooms %}checked{% endif %}>
+                        <span>Dining Area</span>
+                    </label>
+                    <label class="checkbox-card">
+                        <input type="checkbox" name="rooms" value="Kids Room / Guest Room" {% if 'Kids Room / Guest Room' in form_data.rooms %}checked{% endif %}>
+                        <span>Kids / Guest Room</span>
+                    </label>
+                    <label class="checkbox-card">
+                        <input type="checkbox" name="rooms" value="Balcony / Foyer" {% if 'Balcony / Foyer' in form_data.rooms %}checked{% endif %}>
+                        <span>Balcony / Foyer</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="style">Design Aesthetic</label>
+                <select class="form-select" name="style_preference" id="style">
+                    <option value="Modern Minimalist" {% if form_data.style_preference == 'Modern Minimalist' %}selected{% endif %}>Modern Minimalist (Clean lines & functional spaces)</option>
+                    <option value="Scandinavian Warmth" {% if form_data.style_preference == 'Scandinavian Warmth' %}selected{% endif %}>Scandinavian Warmth (Light oak, neutral textures)</option>
+                    <option value="Contemporary Luxury" {% if form_data.style_preference == 'Contemporary Luxury' %}selected{% endif %}>Contemporary Luxury (Velvet, brass accents)</option>
+                    <option value="Traditional Indian Fusion" {% if form_data.style_preference == 'Traditional Indian Fusion' %}selected{% endif %}>Traditional Indian Fusion (Teak, carved motifs)</option>
+                    <option value="Industrial Chic" {% if form_data.style_preference == 'Industrial Chic' %}selected{% endif %}>Industrial Chic (Exposed metal & brick tones)</option>
+                </select>
+            </div>
+
+            <div class="grid-2" style="gap: 14px;">
+                <div class="form-group">
+                    <label class="form-label" for="lighting_count">Lighting Fixtures</label>
+                    <input class="form-input" type="number" id="lighting_count" name="lighting_count" min="1" max="50" value="{{ form_data.lighting_count or 6 }}">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="fan_count">Fans / AC Units</label>
+                    <input class="form-input" type="number" id="fan_count" name="fan_count" min="0" max="20" value="{{ form_data.fan_count or 3 }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Core Furniture Preferences</label>
+                <div class="checkbox-group">
+                    <label class="checkbox-card">
+                        <input type="checkbox" name="furniture" value="3-Seater Sofa" checked>
+                        <span>3-Seater Sofa</span>
+                    </label>
+                    <label class="checkbox-card">
+                        <input type="checkbox" name="furniture" value="Queen Size Bed" checked>
+                        <span>Queen Bed + Mattress</span>
+                    </label>
+                    <label class="checkbox-card">
+                        <input type="checkbox" name="furniture" value="6-Seater Dining Table" checked>
+                        <span>Dining Table</span>
+                    </label>
+                    <label class="checkbox-card">
+                        <input type="checkbox" name="furniture" value="TV Console & Wall Unit">
+                        <span>TV Console</span>
+                    </label>
+                    <label class="checkbox-card">
+                        <input type="checkbox" name="furniture" value="Work from Home Study Desk">
+                        <span>Study Desk / Chair</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="notes">Special Requirements / Constraints</label>
+                <textarea class="form-textarea" id="notes" name="special_notes" rows="2" placeholder="e.g. Pet-friendly fabrics, extra wardrobe storage...">{{ form_data.special_notes or '' }}</textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">🚀 Generate AI Interior Budget Plan</button>
+        </form>
+    </div>
+
+    <!-- Right Column: Result Presentation -->
+    <div>
+        {% if plan_result %}
+        <div class="glass-card" style="border-color: rgba(56, 189, 248, 0.4); margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
+                <div>
+                    <span class="badge badge-home">Generated Plan</span>
+                    <h2 style="font-size: 22px; font-weight: 800; margin-top: 6px;">{{ plan_result.plan_title }}</h2>
+                </div>
+                <div style="text-align: right;">
+                    <div style="font-size: 11px; color: var(--text-secondary); text-transform: uppercase;">Total Allocation</div>
+                    <div style="font-size: 22px; font-weight: 800; color: #38BDF8;">{{ plan_result.currency }} {{ "{:,.2f}".format(plan_result.total_estimated_cost) }}</div>
+                </div>
+            </div>
+
+            <p style="color: var(--text-secondary); font-size: 13.5px; line-height: 1.6; margin-bottom: 16px;">
+                {{ plan_result.summary }}
+            </p>
+
+            <!-- Budget Saving Tips -->
+            {% if plan_result.budget_saving_tips %}
+            <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-glass); border-radius: 12px; padding: 14px; margin-bottom: 20px;">
+                <div style="font-size: 12px; font-weight: 800; color: #FBBF24; text-transform: uppercase; margin-bottom: 6px;">💡 Designer Cost-Saving Tips</div>
+                <ul style="padding-left: 18px; font-size: 13px; color: var(--text-secondary); line-height: 1.5;">
+                    {% for tip in plan_result.budget_saving_tips %}
+                    <li>{{ tip }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            <!-- Room by Room Breakdown -->
+            <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 12px;">Room-by-Room Allocations & Items</h3>
+            {% for room in plan_result.room_breakdown %}
+            <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid var(--border-glass); border-radius: 14px; padding: 16px; margin-bottom: 16px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <h4 style="font-size: 15px; font-weight: 700;">🏠 {{ room.room_name }}</h4>
+                    <span class="badge badge-success">{{ plan_result.currency }} {{ "{:,.2f}".format(room.allocated_budget) }}</span>
+                </div>
+                <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Palette: <b>{{ room.color_palette }}</b></div>
+
+                <!-- Items list with shopping links -->
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    {% for item in room.items %}
+                    <div style="background: rgba(30, 41, 59, 0.6); padding: 12px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.05);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                            <div style="font-weight: 700; font-size: 13.5px;">{{ item.item_name }}</div>
+                            <div style="font-weight: 800; color: #F8FAFC;">{{ plan_result.currency }} {{ "{:,.2f}".format(item.estimated_cost) }}</div>
+                        </div>
+                        <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 8px;">{{ item.recommendation_tip }}</div>
+                        
+                        <div style="display: flex; align-items: center; gap: 4px; flex-wrap: wrap;">
+                            <span style="font-size: 11px; color: var(--text-muted); margin-right: 4px;">Find on:</span>
+                            {% for link in item.shopping_links %}
+                            <a href="{{ link.url }}" target="_blank" class="retail-link-pill">{{ link.icon }} {{ link.platform }}</a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <!-- Initial Guidance Card -->
+        <div class="glass-card" style="text-align: center; padding: 48px 24px;">
+            <div style="font-size: 48px; margin-bottom: 16px;">🛋️</div>
+            <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 8px;">Awaiting Project Specs</h3>
+            <p style="color: var(--text-secondary); font-size: 13.5px; max-width: 400px; margin: 0 auto 20px auto; line-height: 1.6;">
+                Fill out the room counts and budget details on the left to see Gemini construct a tailored interior blueprint with real-time merchant search links.
+            </p>
+            <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+                <span class="badge">Amazon.in</span>
+                <span class="badge">IKEA India</span>
+                <span class="badge">Flipkart</span>
+                <span class="badge">Pepperfry</span>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | PocketSmart AI{% endblock %}
+
+{% block content %}
+<!-- User Dashboard Welcome -->
+<div class="hero-banner" style="text-align: left; padding: 32px 36px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+        <div>
+            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
+                <span class="badge badge-success">Active Plan: Enterprise FinTech</span>
+                <span class="badge badge-home">Gemini Multimodal Active</span>
+            </div>
+            <h1 style="font-size: 28px; margin-bottom: 4px;">Welcome back, {{ user.full_name }}! 👋</h1>
+            <p style="margin: 0; font-size: 14px; color: var(--text-secondary);">Manage your specialized budget recommendations, room plans, and recent event allocations.</p>
+        </div>
+        <div>
+            <a href="/history" class="btn btn-secondary">📜 View Complete History</a>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Launch Cards -->
+<h2 style="font-size: 20px; font-weight: 800; margin-bottom: 16px;">Create New Budget Plan</h2>
+<div class="grid-3" style="margin-bottom: 36px;">
+    <div class="glass-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <span style="font-size: 28px;">🛋️</span>
+            <span class="badge badge-home">Home Decor</span>
+        </div>
+        <h3 style="font-size: 17px; font-weight: 800; margin-bottom: 6px;">Home Interior Planner</h3>
+        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">Configure room sizes, modular furniture, lights, and appliances with IKEA & Amazon shopping integration.</p>
+        <a href="/home-budget" class="btn btn-primary btn-block btn-sm">Start Home Plan →</a>
+    </div>
+
+    <div class="glass-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <span style="font-size: 28px;">🎉</span>
+            <span class="badge badge-party">Event & Food</span>
+        </div>
+        <h3 style="font-size: 17px; font-weight: 800; margin-bottom: 6px;">Party & Event Planner</h3>
+        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">Calculate guest headcounts, catering from Swiggy/Zomato, and venue booking links from OYO.</p>
+        <a href="/party-budget" class="btn btn-primary btn-block btn-sm">Start Party Plan →</a>
+    </div>
+
+    <div class="glass-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <span style="font-size: 28px;">💎</span>
+            <span class="badge badge-jewelry">Multimodal Vision</span>
+        </div>
+        <h3 style="font-size: 17px; font-weight: 800; margin-bottom: 6px;">Jewelry & Outfit Stylist</h3>
+        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">Upload your outfit image for Gemini visual matching with Tanishq, CaratLane, and Melorra brand links.</p>
+        <a href="/jewelry-budget" class="btn btn-primary btn-block btn-sm">Start Jewelry Stylist →</a>
+    </div>
+</div>
+
+<!-- Recent Plans Activity Table -->
+<h2 style="font-size: 20px; font-weight: 800; margin-bottom: 16px;">Recent Recommendation History</h2>
+<div class="glass-card" style="padding: 0; overflow: hidden;">
+    {% if recent_plans %}
+    <div class="data-table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Module</th>
+                    <th>Plan Title</th>
+                    <th>Budget Allocation</th>
+                    <th>Created Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for plan in recent_plans %}
+                <tr>
+                    <td>
+                        {% if plan.module_type == 'home' %}
+                            <span class="badge badge-home">🛋️ Home</span>
+                        {% elif plan.module_type == 'party' %}
+                            <span class="badge badge-party">🎉 Party</span>
+                        {% elif plan.module_type == 'jewelry' %}
+                            <span class="badge badge-jewelry">💎 Jewelry</span>
+                        {% else %}
+                            <span class="badge">{{ plan.module_type }}</span>
+                        {% endif %}
+                    </td>
+                    <td><b>{{ plan.title }}</b></td>
+                    <td><b>{{ plan.currency }} {{ "{:,.2f}".format(plan.budget) }}</b></td>
+                    <td style="color: var(--text-muted);">{{ plan.created_at[:16] if plan.created_at else 'Recent' }}</td>
+                    <td>
+                        <a href="/recommendation-details/{{ plan.id }}" class="btn btn-secondary btn-sm">View Full Plan</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div style="padding: 36px; text-align: center; color: var(--text-secondary);">
+        <p style="margin-bottom: 14px;">No budget plans generated yet.</p>
+        <a href="/home-budget" class="btn btn-primary btn-sm">Create Your First Plan</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

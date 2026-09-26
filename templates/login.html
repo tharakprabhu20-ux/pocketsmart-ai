@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Sign In | PocketSmart AI{% endblock %}
+
+{% block content %}
+<div style="max-width: 440px; margin: 40px auto;">
+    <div class="glass-card">
+        <div style="text-align: center; margin-bottom: 24px;">
+            <div class="brand-icon" style="margin: 0 auto 12px auto; width: 44px; height: 44px; font-size: 22px;">💳</div>
+            <h2 style="font-size: 22px; font-weight: 800;">Welcome Back</h2>
+            <p style="color: var(--text-secondary); font-size: 13.5px; margin-top: 4px;">Sign in to access your dashboard and saved plans.</p>
+        </div>
+
+        {% if error %}
+        <div style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #FCA5A5; padding: 10px 14px; border-radius: 10px; font-size: 13.5px; margin-bottom: 20px;">
+            ⚠️ {{ error }}
+        </div>
+        {% endif %}
+
+        {% if message %}
+        <div style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: #6EE7B7; padding: 10px 14px; border-radius: 10px; font-size: 13.5px; margin-bottom: 20px;">
+            ✅ {{ message }}
+        </div>
+        {% endif %}
+
+        <form method="POST" action="/login">
+            <div class="form-group">
+                <label class="form-label" for="email">Email Address</label>
+                <input class="form-input" type="email" id="email" name="email" placeholder="name@example.com" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="password">Password</label>
+                <input class="form-input" type="password" id="password" name="password" placeholder="••••••••" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block" style="margin-top: 10px;">Sign In to Account</button>
+        </form>
+
+        <div style="text-align: center; margin-top: 20px; font-size: 13.5px; color: var(--text-secondary);">
+            Don't have an account? <a href="/register" style="color: var(--primary-light); font-weight: 700; text-decoration: none;">Register here</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}PocketSmart AI | Home{% endblock %}
+
+{% block content %}
+<!-- Hero Banner -->
+<div class="hero-banner">
+    <div style="display: inline-block; margin-bottom: 14px;">
+        <span class="badge badge-home">✨ Multimodal Generative AI Budget Engine</span>
+    </div>
+    <h1>Your Smart Budget & Recommendation Assistant</h1>
+    <p>
+        Effortlessly allocate budgets, discover curated shopping items within your financial limit, and get instant recommendations for home interiors, events, and jewelry styling.
+    </p>
+    <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
+        <a href="/home-budget" class="btn btn-primary">🛋️ Home Planner</a>
+        <a href="/party-budget" class="btn btn-secondary">🎉 Party Planner</a>
+        <a href="/jewelry-budget" class="btn btn-secondary">💎 Jewelry Stylist</a>
+    </div>
+</div>
+
+<!-- Three Specialized Planners Feature Cards -->
+<div style="margin-bottom: 48px;">
+    <h2 style="font-size: 24px; font-weight: 800; margin-bottom: 20px; text-align: center;">Explore Specialized AI Planners</h2>
+    <div class="grid-3">
+        <!-- Card 1: Home Interior -->
+        <div class="glass-card">
+            <div style="font-size: 36px; margin-bottom: 14px;">🛋️</div>
+            <h3 style="font-size: 19px; font-weight: 800; margin-bottom: 8px;">Home Interior Planner</h3>
+            <p style="color: var(--text-secondary); font-size: 13.5px; line-height: 1.6; margin-bottom: 18px;">
+                Plan room-by-room decor, modular furniture, fans, and ambient lighting within budget. Includes direct shopping links for Amazon, IKEA, Flipkart & Pepperfry.
+            </p>
+            <a href="/home-budget" class="btn btn-primary btn-block">Launch Home Planner →</a>
+        </div>
+
+        <!-- Card 2: Party Planner -->
+        <div class="glass-card">
+            <div style="font-size: 36px; margin-bottom: 14px;">🎉</div>
+            <h3 style="font-size: 19px; font-weight: 800; margin-bottom: 8px;">Party & Event Planner</h3>
+            <p style="color: var(--text-secondary); font-size: 13.5px; line-height: 1.6; margin-bottom: 18px;">
+                Calculate per-head catering, venue booking, photography, and decor allocations with Swiggy, Zomato, and OYO venue search integration.
+            </p>
+            <a href="/party-budget" class="btn btn-primary btn-block">Launch Party Planner →</a>
+        </div>
+
+        <!-- Card 3: Jewelry Stylist -->
+        <div class="glass-card">
+            <div style="font-size: 36px; margin-bottom: 14px;">💎</div>
+            <h3 style="font-size: 19px; font-weight: 800; margin-bottom: 8px;">Jewelry & Outfit Stylist</h3>
+            <p style="color: var(--text-secondary); font-size: 13.5px; line-height: 1.6; margin-bottom: 18px;">
+                Upload a photo of your outfit or set your occasion. Gemini Multimodal Vision coordinates matching gold, diamond, or gemstone pieces with Tanishq, CaratLane & Melorra links.
+            </p>
+            <a href="/jewelry-budget" class="btn btn-primary btn-block">Launch Jewelry Stylist →</a>
+        </div>
+    </div>
+</div>
+
+<!-- Testimonials Section -->
+<div style="margin-bottom: 48px;">
+    <div style="text-align: center; margin-bottom: 28px;">
+        <span class="badge badge-party">💬 User Experiences</span>
+        <h2 style="font-size: 26px; font-weight: 800; margin-top: 8px;">Loved by Smart Budgeters Worldwide</h2>
+    </div>
+
+    <div class="grid-3">
+        <div class="glass-card">
+            <div style="color: #FBBF24; font-size: 18px; margin-bottom: 10px;">★★★★★</div>
+            <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px;">
+                "The Home Interior Planner saved me over ₹45,000 on my new 2BHK flat in Bangalore. The direct IKEA and Pepperfry search links gave us exactly what matched our living room dimensions!"
+            </p>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="width: 36px; height: 36px; border-radius: 50%; background: #4F46E5; display: flex; align-items: center; justify-content: center; font-weight: bold;">R</div>
+                <div>
+                    <div style="font-weight: 700; font-size: 13.5px;">Rohan Sharma</div>
+                    <div style="font-size: 12px; color: var(--text-muted);">Homeowner & Architect</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card">
+            <div style="color: #FBBF24; font-size: 18px; margin-bottom: 10px;">★★★★★</div>
+            <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px;">
+                "Organizing my sister's engagement was stress-free thanks to the Party Planner. The per-guest food and venue breakdown kept us strictly within our ₹1.5 Lakh limit."
+            </p>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="width: 36px; height: 36px; border-radius: 50%; background: #F59E0B; display: flex; align-items: center; justify-content: center; font-weight: bold;">P</div>
+                <div>
+                    <div style="font-weight: 700; font-size: 13.5px;">Pooja Venkat</div>
+                    <div style="font-size: 12px; color: var(--text-muted);">Event Coordinator</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card">
+            <div style="color: #FBBF24; font-size: 18px; margin-bottom: 10px;">★★★★★</div>
+            <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px;">
+                "I uploaded a picture of my wedding reception lehenga and within seconds, Gemini recommended matching rose-gold earrings from CaratLane that looked unbelievable!"
+            </p>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="width: 36px; height: 36px; border-radius: 50%; background: #C084FC; display: flex; align-items: center; justify-content: center; font-weight: bold;">A</div>
+                <div>
+                    <div style="font-weight: 700; font-size: 13.5px;">Ananya Deshmukh</div>
+                    <div style="font-size: 12px; color: var(--text-muted);">Fashion Enthusiast</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

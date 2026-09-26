@@ -1,6 +1,6 @@
 """
 Specialized Generative AI Recommendation Service for Home, Party, and Jewelry Planners.
-Integrates Google Gemini 1.5/2.5 Flash models to generate structured cost allocations,
+Integrates Google Gemini 2.5/3.8 Flash models to generate structured cost allocations,
 multimodal outfit image matching, and intelligent retail brand search links.
 """
 
@@ -11,19 +11,19 @@ from typing import Dict, Any, List, Optional
 from io import BytesIO
 from PIL import Image
 from dotenv import load_dotenv
-from pydantic import BaseModel, Field
 import google.generativeai as genai
 
 load_dotenv()
 
-FLASH_MODEL = "gemini-1.5-flash"
+# Active standard generation models for Google Gemini API
+FLASH_MODEL = "gemini-3.8-flash"
 api_key = os.getenv("GEMINI_API_KEY")
 if api_key:
     genai.configure(api_key=api_key)
 
 
 def get_genai_model(model_name: str = FLASH_MODEL):
-    """Configures and returns a GenerativeModel instance."""
+    """Configures and returns a GenerativeModel instance with fallback."""
     current_key = os.getenv("GEMINI_API_KEY")
     if not current_key or current_key == "your_gemini_api_key_here":
         raise ValueError("GEMINI_API_KEY is not configured in .env")

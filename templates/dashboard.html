@@ -8,54 +8,115 @@
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
         <div>
             <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
-                <span class="badge badge-success">Active Plan: Enterprise FinTech</span>
-                <span class="badge badge-home">Gemini Multimodal Active</span>
+                <span class="badge badge-success">Active Session: Enterprise FinTech</span>
+                <span class="badge badge-home">Gemini 3.8 Flash Active</span>
             </div>
             <h1 style="font-size: 28px; margin-bottom: 4px;">Welcome back, {{ user.full_name }}! 👋</h1>
-            <p style="margin: 0; font-size: 14px; color: var(--text-secondary);">Manage your specialized budget recommendations, room plans, and recent event allocations.</p>
+            <p style="margin: 0; font-size: 14px; color: var(--text-secondary);">Manage your household allocations, live trip budgets, room decor plans, and event schedules.</p>
         </div>
-        <div>
-            <a href="/history" class="btn btn-secondary">📜 View Complete History</a>
+        <div style="display: flex; gap: 8px;">
+            <a href="/history" class="btn btn-secondary">📜 Recommendation History</a>
         </div>
     </div>
 </div>
 
-<!-- Quick Launch Cards -->
-<h2 style="font-size: 20px; font-weight: 800; margin-bottom: 16px;">Create New Budget Plan</h2>
-<div class="grid-3" style="margin-bottom: 36px;">
+<!-- Quick Launch Cards for All 5 Modules -->
+<h2 style="font-size: 20px; font-weight: 800; margin-bottom: 16px;">Financial & Lifestyle Planners</h2>
+<div class="grid-5" style="margin-bottom: 36px;">
+    <!-- Module 1: Household Budget -->
     <div class="glass-card">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-            <span style="font-size: 28px;">🛋️</span>
-            <span class="badge badge-home">Home Decor</span>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <span style="font-size: 26px;">📊</span>
+            <span class="badge badge-budget">50/30/20 Math</span>
         </div>
-        <h3 style="font-size: 17px; font-weight: 800; margin-bottom: 6px;">Home Interior Planner</h3>
-        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">Configure room sizes, modular furniture, lights, and appliances with IKEA & Amazon shopping integration.</p>
-        <a href="/home-budget" class="btn btn-primary btn-block btn-sm">Start Home Plan →</a>
+        <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 6px;">Monthly Budget</h3>
+        <p style="font-size: 12.5px; color: var(--text-secondary); margin-bottom: 14px;">Calculate housing, utilities, groceries, and savings surpluses deterministically.</p>
+        <a href="/monthly-budget" class="btn btn-primary btn-block btn-sm">Manage Budget →</a>
     </div>
 
+    <!-- Module 2: Trip Tracker -->
     <div class="glass-card">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-            <span style="font-size: 28px;">🎉</span>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <span style="font-size: 26px;">✈️</span>
+            <span class="badge badge-trip">Live Tracker</span>
+        </div>
+        <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 6px;">Trip Tracker</h3>
+        <p style="font-size: 12.5px; color: var(--text-secondary); margin-bottom: 14px;">Log vacation projects, itemize flights & hotels, and track live remaining budget.</p>
+        <a href="/trip-tracker" class="btn btn-primary btn-block btn-sm">Track Trips →</a>
+    </div>
+
+    <!-- Module 3: Home Interior -->
+    <div class="glass-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <span style="font-size: 26px;">🛋️</span>
+            <span class="badge badge-home">AI Vision</span>
+        </div>
+        <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 6px;">Home Interior</h3>
+        <p style="font-size: 12.5px; color: var(--text-secondary); margin-bottom: 14px;">Room decor, modular furniture, and direct IKEA, Amazon & Flipkart links.</p>
+        <a href="/home-budget" class="btn btn-primary btn-block btn-sm">Plan Home →</a>
+    </div>
+
+    <!-- Module 4: Party Planner -->
+    <div class="glass-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <span style="font-size: 26px;">🎉</span>
             <span class="badge badge-party">Event & Food</span>
         </div>
-        <h3 style="font-size: 17px; font-weight: 800; margin-bottom: 6px;">Party & Event Planner</h3>
-        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">Calculate guest headcounts, catering from Swiggy/Zomato, and venue booking links from OYO.</p>
-        <a href="/party-budget" class="btn btn-primary btn-block btn-sm">Start Party Plan →</a>
+        <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 6px;">Party Planner</h3>
+        <p style="font-size: 12.5px; color: var(--text-secondary); margin-bottom: 14px;">Guest per-head catering, OYO venues, and Swiggy food orders within budget.</p>
+        <a href="/party-budget" class="btn btn-primary btn-block btn-sm">Plan Event →</a>
     </div>
 
+    <!-- Module 5: Jewelry Stylist -->
     <div class="glass-card">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-            <span style="font-size: 28px;">💎</span>
-            <span class="badge badge-jewelry">Multimodal Vision</span>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <span style="font-size: 26px;">💎</span>
+            <span class="badge badge-jewelry">Multimodal</span>
         </div>
-        <h3 style="font-size: 17px; font-weight: 800; margin-bottom: 6px;">Jewelry & Outfit Stylist</h3>
-        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">Upload your outfit image for Gemini visual matching with Tanishq, CaratLane, and Melorra brand links.</p>
-        <a href="/jewelry-budget" class="btn btn-primary btn-block btn-sm">Start Jewelry Stylist →</a>
+        <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 6px;">Jewelry Stylist</h3>
+        <p style="font-size: 12.5px; color: var(--text-secondary); margin-bottom: 14px;">Outfit image inspection with Tanishq, CaratLane, and Melorra pieces.</p>
+        <a href="/jewelry-budget" class="btn btn-primary btn-block btn-sm">Style Outfit →</a>
     </div>
 </div>
 
+<!-- Active Trips Summary -->
+{% if active_trips %}
+<div style="margin-bottom: 36px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+        <h2 style="font-size: 20px; font-weight: 800;">Active Travel Projects</h2>
+        <a href="/trip-tracker" class="btn btn-secondary btn-sm">+ New Trip</a>
+    </div>
+    <div class="grid-3">
+        {% for trip in active_trips[:3] %}
+        <div class="glass-card">
+            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+                <div>
+                    <h4 style="font-size: 16px; font-weight: 800;">✈️ {{ trip.trip_name }}</h4>
+                    <div style="font-size: 12px; color: var(--text-muted);">📍 {{ trip.destination }}</div>
+                </div>
+                <span class="badge {% if trip.remaining_budget >= 0 %}badge-success{% else %}badge-danger{% endif %}">
+                    {{ trip.currency }} {{ "{:,.0f}".format(trip.remaining_budget) }} Left
+                </span>
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-bar {% if trip.utilization_pct <= 80 %}progress-safe{% elif trip.utilization_pct <= 100 %}progress-warning{% else %}progress-danger{% endif %}" style="width: {{ [trip.utilization_pct, 100]|min }}%;"></div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-secondary); margin-top: 6px;">
+                <span>Spent: <b>{{ trip.currency }} {{ "{:,.0f}".format(trip.total_spent) }}</b></span>
+                <span>Budget: <b>{{ trip.currency }} {{ "{:,.0f}".format(trip.budget) }}</b></span>
+            </div>
+            
+            <a href="/trip-tracker?trip_id={{ trip.id }}" class="btn btn-secondary btn-sm btn-block" style="margin-top: 12px;">Manage Trip Ledger →</a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
 <!-- Recent Plans Activity Table -->
-<h2 style="font-size: 20px; font-weight: 800; margin-bottom: 16px;">Recent Recommendation History</h2>
+<h2 style="font-size: 20px; font-weight: 800; margin-bottom: 16px;">Recent AI Recommendations & Plans</h2>
 <div class="glass-card" style="padding: 0; overflow: hidden;">
     {% if recent_plans %}
     <div class="data-table-container">
@@ -74,11 +135,15 @@
                 <tr>
                     <td>
                         {% if plan.module_type == 'home' %}
-                            <span class="badge badge-home">🛋️ Home</span>
+                            <span class="badge badge-home">🛋️ Home Interior</span>
                         {% elif plan.module_type == 'party' %}
-                            <span class="badge badge-party">🎉 Party</span>
+                            <span class="badge badge-party">🎉 Party & Event</span>
                         {% elif plan.module_type == 'jewelry' %}
-                            <span class="badge badge-jewelry">💎 Jewelry</span>
+                            <span class="badge badge-jewelry">💎 Jewelry Stylist</span>
+                        {% elif plan.module_type == 'monthly_budget' %}
+                            <span class="badge badge-budget">📊 Household Budget</span>
+                        {% elif plan.module_type == 'trip' %}
+                            <span class="badge badge-trip">✈️ Trip Plan</span>
                         {% else %}
                             <span class="badge">{{ plan.module_type }}</span>
                         {% endif %}
@@ -97,7 +162,7 @@
     {% else %}
     <div style="padding: 36px; text-align: center; color: var(--text-secondary);">
         <p style="margin-bottom: 14px;">No budget plans generated yet.</p>
-        <a href="/home-budget" class="btn btn-primary btn-sm">Create Your First Plan</a>
+        <a href="/monthly-budget" class="btn btn-primary btn-sm">Create Monthly Budget</a>
     </div>
     {% endif %}
 </div>

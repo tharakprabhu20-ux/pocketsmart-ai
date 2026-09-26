@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+
+{% block title %}Trip Expense Tracker | PocketSmart AI{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 24px;">
+    <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+        <span class="badge badge-trip">✈️ Vacation & Travel Finance</span>
+        <span class="badge badge-success">Live Budget vs Actual Ledger</span>
+    </div>
+    <h1 style="font-size: 28px; font-weight: 800;">Trip Expense Tracker</h1>
+    <p style="color: var(--text-secondary); font-size: 14px;">
+        Create dedicated vacation budgets, log itemized expenses across flights, hotels, food, and activities, and monitor your real-time remaining balance.
+    </p>
+</div>
+
+<div class="grid-2" style="align-items: start; margin-bottom: 40px;">
+    <!-- Left Column: Forms -->
+    <div>
+        <!-- A. New Trip Creation Card -->
+        <div class="glass-card" style="margin-bottom: 24px;">
+            <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 16px;">✈️ Create New Trip Project</h3>
+            <form method="POST" action="/trip-tracker/new">
+                <div class="form-group">
+                    <label class="form-label" for="trip_name">Trip Name</label>
+                    <input class="form-input" type="text" id="trip_name" name="trip_name" placeholder="e.g., Goa Vacation 2026 / Dubai Summer Trip" required>
+                </div>
+
+                <div class="grid-2" style="gap: 12px;">
+                    <div class="form-group">
+                        <label class="form-label" for="destination">Destination</label>
+                        <input class="form-input" type="text" id="destination" name="destination" placeholder="Goa, India" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="budget">Total Trip Budget</label>
+                        <div style="display: flex; gap: 8px;">
+                            <select class="form-select" name="currency" style="width: 110px;">
+                                <option value="INR">₹ INR</option>
+                                <option value="USD">$ USD</option>
+                                <option value="EUR">€ EUR</option>
+                                <option value="GBP">£ GBP</option>
+                                <option value="AED">AED</option>
+                            </select>
+                            <input class="form-input" type="number" id="budget" name="budget" min="500" step="500" value="45000" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid-2" style="gap: 12px;">
+                    <div class="form-group">
+                        <label class="form-label" for="start_date">Start Date</label>
+                        <input class="form-input" type="date" id="start_date" name="start_date">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="end_date">End Date</label>
+                        <input class="form-input" type="date" id="end_date" name="end_date">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">➕ Create Trip Ledger</button>
+            </form>
+        </div>
+
+        <!-- B. Log Expense into Active Trip (If Trip Selected) -->
+        {% if selected_trip %}
+        <div class="glass-card" style="border-color: rgba(236, 72, 153, 0.4);">
+            <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 16px;">💳 Add Expense to: {{ selected_trip.trip_name }}</h3>
+            
+            <form method="POST" action="/trip-tracker/expense">
+                <input type="hidden" name="trip_id" value="{{ selected_trip.id }}">
+
+                <div class="grid-2" style="gap: 12px;">
+                    <div class="form-group">
+                        <label class="form-label" for="category">Category</label>
+                        <select class="form-select" name="category" id="category">
+                            <option value="Flights/Transit">✈️ Flights & Transit</option>
+                            <option value="Hotels/Stay">🏨 Hotel / Stay</option>
+                            <option value="Food & Dining">🍽️ Food & Dining</option>
+                            <option value="Activities">🏄 Activities & Sightseeing</option>
+                            <option value="Shopping">🛍️ Shopping & Souvenirs</option>
+                            <option value="Misc">📦 Miscellaneous</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="amount">Amount ({{ selected_trip.currency }})</label>
+                        <input class="form-input" type="number" id="amount" name="amount" min="1" step="50" placeholder="1500" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="description">Expense Description</label>
+                    <input class="form-input" type="text" id="description" name="description" placeholder="e.g. Scuba diving pass / Beachside dinner" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="expense_date">Date</label>
+                    <input class="form-input" type="date" id="expense_date" name="expense_date">
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block" style="background: linear-gradient(135deg, #EC4899 0%, #8B5CF6 100%);">
+                    💾 Record Expense
+                </button>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Right Column: Active Trip Summary & Itemized Ledger -->
+    <div>
+        {% if selected_trip %}
+        <div class="glass-card" style="border-color: rgba(236, 72, 153, 0.4); margin-bottom: 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
+                <div>
+                    <span class="badge badge-trip">✈️ {{ selected_trip.destination }}</span>
+                    <h2 style="font-size: 22px; font-weight: 800; margin-top: 6px;">{{ selected_trip.trip_name }}</h2>
+                    <div style="font-size: 12px; color: var(--text-muted);">
+                        {{ selected_trip.start_date or 'N/A' }} to {{ selected_trip.end_date or 'N/A' }}
+                    </div>
+                </div>
+                <div style="text-align: right;">
+                    <div style="font-size: 11px; color: var(--text-secondary); text-transform: uppercase;">Remaining Budget</div>
+                    <div style="font-size: 22px; font-weight: 800; color: {% if selected_trip.remaining_budget >= 0 %}#34D399{% else %}#F87171{% endif %};">
+                        {{ selected_trip.currency }} {{ "{:,.2f}".format(selected_trip.remaining_budget) }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress bar -->
+            <div class="progress-container" style="height: 12px; margin: 14px 0;">
+                <div class="progress-bar {% if selected_trip.utilization_pct <= 80 %}progress-safe{% elif selected_trip.utilization_pct <= 100 %}progress-warning{% else %}progress-danger{% endif %}" style="width: {{ [selected_trip.utilization_pct, 100]|min }}%;"></div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; font-size: 13px; color: var(--text-secondary); margin-bottom: 20px;">
+                <span>Total Spent: <b>{{ selected_trip.currency }} {{ "{:,.2f}".format(selected_trip.total_spent) }}</b></span>
+                <span>Budget Cap: <b>{{ selected_trip.currency }} {{ "{:,.2f}".format(selected_trip.budget) }}</b> ({{ selected_trip.utilization_pct }}% used)</span>
+            </div>
+
+            <!-- Category Spending Distribution -->
+            {% if selected_trip.category_totals %}
+            <h4 style="font-size: 14px; font-weight: 800; text-transform: uppercase; margin-bottom: 10px;">Category Breakdown</h4>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;">
+                {% for cat, amt in selected_trip.category_totals.items() %}
+                <span class="badge" style="background: rgba(15, 23, 42, 0.8); border: 1px solid var(--border-glass);">
+                    {{ cat }}: <b>{{ selected_trip.currency }} {{ "{:,.2f}".format(amt) }}</b>
+                </span>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- Itemized Expenses Table -->
+            <h4 style="font-size: 14px; font-weight: 800; text-transform: uppercase; margin-bottom: 10px;">Itemized Expense Log ({{ selected_trip.expenses|length }} entries)</h4>
+            {% if selected_trip.expenses %}
+            <div class="data-table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Category</th>
+                            <th>Description</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for exp in selected_trip.expenses %}
+                        <tr>
+                            <td style="color: var(--text-muted); font-size: 12px;">{{ exp.expense_date }}</td>
+                            <td><span class="badge">{{ exp.category }}</span></td>
+                            <td><b>{{ exp.description }}</b></td>
+                            <td style="font-weight: 800;">{{ selected_trip.currency }} {{ "{:,.2f}".format(exp.amount) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p style="font-size: 13px; color: var(--text-muted); text-align: center; padding: 20px;">No expenses logged for this trip yet. Use the form on the left to add one!</p>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <!-- All Trips Master List -->
+        <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 14px;">📁 Your Travel Projects</h3>
+        {% if all_trips %}
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+            {% for t in all_trips %}
+            <div class="glass-card" style="padding: 16px; {% if selected_trip and selected_trip.id == t.id %}border-color: #EC4899;{% endif %}">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h4 style="font-size: 15px; font-weight: 800; margin-bottom: 2px;">✈️ {{ t.trip_name }}</h4>
+                        <div style="font-size: 12px; color: var(--text-muted);">📍 {{ t.destination }} | Budget: {{ t.currency }} {{ "{:,.0f}".format(t.budget) }}</div>
+                    </div>
+                    <div>
+                        <a href="/trip-tracker?trip_id={{ t.id }}" class="btn btn-secondary btn-sm">
+                            {% if selected_trip and selected_trip.id == t.id %}Active Ledger{% else %}Open Ledger →{% endif %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="glass-card" style="text-align: center; padding: 36px;">
+            <p style="color: var(--text-secondary); font-size: 13.5px;">No trips created yet. Create your first travel project using the form on the left!</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

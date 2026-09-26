@@ -2,12 +2,16 @@
 Database Layer for PocketSmart AI.
 Provides thread-safe, idempotent SQLite persistence for:
 1. User authentication and multi-user accounts
-2. Baseline income and transaction ledgers (with backwards compatibility for existing single-user helpers)
-3. Specialized Planner recommendations & session history (Home Interior, Party, Jewelry)
+2. Baseline income and transaction ledgers
+3. Specialized Planner recommendations & session history (Home, Party, Jewelry)
+4. Enhanced Modules:
+   - Monthly Household Budget Plans (Income, Fixed & Variable Costs, 50/30/20 Surpluses)
+   - Trips & Vacation Expense Trackers (Trips ledger + itemized expense entries)
 """
 
 import sqlite3
 import os
+import json
 from typing import Optional, List, Dict, Any
 from datetime import datetime
 
@@ -60,12 +64,12 @@ def init_db(db_path: str = DB_PATH) -> None:
             )
         """)
         
-        # 4. Recommendation History table (for Home, Party, Jewelry planners)
+        # 4. Recommendation History table (for Home, Party, Jewelry, Monthly Budget, Trip Tracker)
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS recommendations (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 user_id INTEGER DEFAULT 1,
-                module_type TEXT NOT NULL, -- 'home', 'party', 'jewelry'
+                module_type TEXT NOT NULL, -- 'home', 'party', 'jewelry', 'monthly_budget', 'trip'
                 title TEXT NOT NULL,
                 budget REAL NOT NULL,
                 currency TEXT NOT NULL DEFAULT 'INR',
@@ -73,6 +77,35 @@ def init_db(db_path: str = DB_PATH) -> None:
                 plan_result_json TEXT NOT NULL,
                 image_path TEXT,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+        
+        # 5. Trips master table (for Trip Expense Tracker)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS trips (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER DEFAULT 1,
+                trip_name TEXT NOT NULL,
+                destination TEXT NOT NULL,
+                budget REAL NOT NULL,
+                currency TEXT NOT NULL DEFAULT 'INR',
+                start_date TEXT,
+                end_date TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+        
+        # 6. Trip expenses table
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS trip_expenses (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                trip_id INTEGER NOT NULL,
+                category TEXT NOT NULL, -- 'Flights/Transit', 'Hotels/Stay', 'Food & Dining', 'Activities', 'Shopping', 'Misc'
+                description TEXT NOT NULL,
+                amount REAL NOT NULL,
+                expense_date TEXT NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (trip_id) REFERENCES trips (id) ON DELETE CASCADE
             )
         """)
         
@@ -140,7 +173,7 @@ def save_recommendation(
     image_path: Optional[str] = None,
     db_path: str = DB_PATH
 ) -> int:
-    """Saves an AI-generated budget recommendation plan to history."""
+    """Saves an AI-generated budget recommendation or manual calculation plan to history."""
     init_db(db_path)
     with get_connection(db_path) as conn:
         cursor = conn.cursor()
@@ -188,6 +221,109 @@ def get_recommendation_by_id(rec_id: int, db_path: str = DB_PATH) -> Optional[Di
         """, (rec_id,))
         row = cursor.fetchone()
         return dict(row) if row else None
+
+
+# =========================================================================
+# Trip Expense Tracker Functions
+# =========================================================================
+
+def create_trip(
+    user_id: int,
+    trip_name: str,
+    destination: str,
+    budget: float,
+    currency: str = "INR",
+    start_date: str = "",
+    end_date: str = "",
+    db_path: str = DB_PATH
+) -> int:
+    """Creates a new trip record in SQLite."""
+    init_db(db_path)
+    with get_connection(db_path) as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+            INSERT INTO trips (user_id, trip_name, destination, budget, currency, start_date, end_date)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        """, (user_id, trip_name.strip(), destination.strip(), float(budget), currency, start_date, end_date))
+        conn.commit()
+        return cursor.lastrowid
+
+
+def get_trips_by_user(user_id: Optional[int] = None, db_path: str = DB_PATH) -> List[Dict[str, Any]]:
+    """Fetches all trips with calculated total expenses and remaining balance."""
+    init_db(db_path)
+    with get_connection(db_path) as conn:
+        cursor = conn.cursor()
+        if user_id is not None:
+            cursor.execute("SELECT * FROM trips WHERE user_id = ? ORDER BY id DESC", (user_id,))
+        else:
+            cursor.execute("SELECT * FROM trips ORDER BY id DESC")
+        trip_rows = cursor.fetchall()
+        
+        trips_list = []
+        for t in trip_rows:
+            trip_dict = dict(t)
+            # Calculate total expenses for this trip
+            cursor.execute("SELECT SUM(amount) as total_spent FROM trip_expenses WHERE trip_id = ?", (trip_dict["id"],))
+            spent_row = cursor.fetchone()
+            total_spent = float(spent_row["total_spent"]) if spent_row and spent_row["total_spent"] is not None else 0.0
+            trip_dict["total_spent"] = total_spent
+            trip_dict["remaining_budget"] = trip_dict["budget"] - total_spent
+            trip_dict["utilization_pct"] = round((total_spent / trip_dict["budget"] * 100.0), 1) if trip_dict["budget"] > 0 else 0.0
+            trips_list.append(trip_dict)
+            
+        return trips_list
+
+
+def get_trip_by_id(trip_id: int, db_path: str = DB_PATH) -> Optional[Dict[str, Any]]:
+    """Fetches single trip details along with its itemized expenses."""
+    init_db(db_path)
+    with get_connection(db_path) as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM trips WHERE id = ?", (trip_id,))
+        trip_row = cursor.fetchone()
+        if not trip_row:
+            return None
+            
+        trip_dict = dict(trip_row)
+        cursor.execute("SELECT * FROM trip_expenses WHERE trip_id = ? ORDER BY expense_date DESC, id DESC", (trip_id,))
+        expenses = [dict(r) for r in cursor.fetchall()]
+        
+        total_spent = sum(e["amount"] for e in expenses)
+        trip_dict["expenses"] = expenses
+        trip_dict["total_spent"] = total_spent
+        trip_dict["remaining_budget"] = trip_dict["budget"] - total_spent
+        trip_dict["utilization_pct"] = round((total_spent / trip_dict["budget"] * 100.0), 1) if trip_dict["budget"] > 0 else 0.0
+        
+        # Category breakdown aggregation
+        cat_totals = {}
+        for e in expenses:
+            cat = e["category"]
+            cat_totals[cat] = cat_totals.get(cat, 0.0) + float(e["amount"])
+        trip_dict["category_totals"] = cat_totals
+        
+        return trip_dict
+
+
+def add_trip_expense(
+    trip_id: int,
+    category: str,
+    description: str,
+    amount: float,
+    expense_date: str = "",
+    db_path: str = DB_PATH
+) -> int:
+    """Adds a single expense entry to a trip."""
+    init_db(db_path)
+    with get_connection(db_path) as conn:
+        cursor = conn.cursor()
+        date_val = expense_date if expense_date else datetime.today().strftime('%Y-%m-%d')
+        cursor.execute("""
+            INSERT INTO trip_expenses (trip_id, category, description, amount, expense_date)
+            VALUES (?, ?, ?, ?, ?)
+        """, (trip_id, category.strip(), description.strip(), float(amount), date_val))
+        conn.commit()
+        return cursor.lastrowid
 
 
 # =========================================================================

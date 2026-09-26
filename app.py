@@ -4,10 +4,13 @@ Implements:
 1. Static files & Jinja2 template rendering
 2. User authentication (Bcrypt hashing, JWT token creation, cookie session persistence)
 3. Endpoints: /, /login, /register, /logout, /dashboard, /history, /recommendation-details/{id}
-4. Specialized Generative AI Planners:
+4. Core Lifestyle AI Modules:
    - /home-budget (Home Interior & Decor with IKEA, Amazon, Flipkart, Pepperfry links)
    - /party-budget (Party & Event with Swiggy, Zomato, OYO links)
    - /jewelry-budget (Jewelry & Outfit Vision with Tanishq, CaratLane, Bluestone links)
+5. Enhanced Financial & Tracker Modules:
+   - /monthly-budget (Monthly Household Fixed & Variable Allocations with 50/30/20 Surpluses)
+   - /trip-tracker (Vacation & Trip Project Ledger with Itemized Expense Submissions)
 """
 
 import os
@@ -36,7 +39,11 @@ from backend.db import (
     get_user_by_id,
     save_recommendation,
     get_recommendations_by_user,
-    get_recommendation_by_id
+    get_recommendation_by_id,
+    create_trip,
+    get_trips_by_user,
+    get_trip_by_id,
+    add_trip_expense
 )
 from backend.auth import (
     hash_password,
@@ -100,7 +107,7 @@ def get_current_user_optional(request: Request) -> Optional[dict]:
 
 @app.get("/", response_class=HTMLResponse)
 async def home_page(request: Request):
-    """Landing Home Page with hero banner, planner cards, and testimonials."""
+    """Landing Home Page with hero banner, 5 planner cards, and testimonials."""
     user = get_current_user_optional(request)
     return templates.TemplateResponse(request=request, name="index.html", context={"user": user})
 
@@ -213,22 +220,24 @@ async def login_for_access_token(email: str = Form(...), password: str = Form(..
 
 @app.get("/dashboard", response_class=HTMLResponse)
 async def dashboard_view(request: Request):
-    """User Portal showing recent recommendation plans and launch shortcuts."""
+    """User Portal showing recent recommendation plans, active trips, and launch shortcuts."""
     user = get_current_user_optional(request)
     if not user:
         return RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
         
     recent_plans = get_recommendations_by_user(user_id=user["id"], limit=10)
+    active_trips = get_trips_by_user(user_id=user["id"])
+    
     return templates.TemplateResponse(
         request=request,
         name="dashboard.html",
-        context={"user": user, "recent_plans": recent_plans}
+        context={"user": user, "recent_plans": recent_plans, "active_trips": active_trips}
     )
 
 
 @app.get("/history", response_class=HTMLResponse)
 async def history_view(request: Request, module: Optional[str] = None):
-    """Recommendation History page logging past user plans."""
+    """Master log of all past AI recommendations and manual plans."""
     user = get_current_user_optional(request)
     user_id = user["id"] if user else None
     
@@ -269,7 +278,213 @@ async def recommendation_details_view(request: Request, rec_id: int):
 
 
 # =========================================================================
-# 3. SPECIALIZED AI PLANNER MODULES
+# 3. ENHANCED MODULE 1: MONTHLY HOUSEHOLD BUDGET PLANNER
+# =========================================================================
+
+@app.get("/monthly-budget", response_class=HTMLResponse)
+async def monthly_budget_page(request: Request):
+    """Monthly Household Budget view."""
+    user = get_current_user_optional(request)
+    return templates.TemplateResponse(
+        request=request,
+        name="monthly_budget.html",
+        context={"user": user, "form_data": {}, "budget_result": None}
+    )
+
+
+@app.post("/monthly-budget", response_class=HTMLResponse)
+async def monthly_budget_calculate(
+    request: Request,
+    income: float = Form(75000.0),
+    currency: str = Form("INR"),
+    housing_rent: float = Form(20000.0),
+    groceries: float = Form(10000.0),
+    utilities: float = Form(4000.0),
+    transport: float = Form(3500.0),
+    dining_entertainment: float = Form(8000.0),
+    shopping_lifestyle: float = Form(6000.0),
+    savings_investments: float = Form(15000.0)
+):
+    """Calculates deterministic 50/30/20 household budget breakdown and surpluses."""
+    user = get_current_user_optional(request)
+    user_id = user["id"] if user else 1
+    
+    # 1. Deterministic Category Aggregations
+    needs_actual = housing_rent + groceries + utilities + transport
+    wants_actual = dining_entertainment + shopping_lifestyle
+    savings_actual = savings_investments
+    total_expenses = needs_actual + wants_actual + savings_actual
+    
+    needs_target = income * 0.50
+    wants_target = income * 0.30
+    savings_target = income * 0.20
+    
+    needs_variance = needs_target - needs_actual
+    wants_variance = wants_target - wants_actual
+    savings_variance = savings_actual - savings_target
+    net_cash_flow = income - total_expenses
+    
+    needs_pct = round((needs_actual / income * 100.0), 1) if income > 0 else 0.0
+    wants_pct = round((wants_actual / income * 100.0), 1) if income > 0 else 0.0
+    savings_pct = round((savings_actual / income * 100.0), 1) if income > 0 else 0.0
+    
+    # Generate diagnostic summary
+    if net_cash_flow >= 0 and savings_pct >= 20.0:
+        summary = f"Excellent financial health! Your household saves {savings_pct}% of take-home income ({currency} {savings_actual:,.2f}) with a net surplus buffer of {currency} {net_cash_flow:,.2f}."
+    elif net_cash_flow >= 0:
+        summary = f"Stable cash flow with a monthly surplus of {currency} {net_cash_flow:,.2f}. Consider trimming wants ({wants_pct}%) to hit the golden 20% savings target ({currency} {savings_target:,.2f})."
+    else:
+        summary = f"Deficit Warning: Monthly expenses exceed take-home pay by {currency} {abs(net_cash_flow):,.2f}. Needs represent {needs_pct}% and Wants represent {wants_pct}% of income."
+        
+    budget_result = {
+        "plan_title": "Monthly Household Budget Plan",
+        "income": income,
+        "currency": currency,
+        "needs_actual": needs_actual,
+        "needs_target": needs_target,
+        "needs_variance": needs_variance,
+        "needs_pct": needs_pct,
+        "wants_actual": wants_actual,
+        "wants_target": wants_target,
+        "wants_variance": wants_variance,
+        "wants_pct": wants_pct,
+        "savings_actual": savings_actual,
+        "savings_target": savings_target,
+        "savings_variance": savings_variance,
+        "savings_pct": savings_pct,
+        "total_expenses": total_expenses,
+        "net_cash_flow": net_cash_flow,
+        "summary": summary
+    }
+    
+    # Save plan to SQLite history
+    save_recommendation(
+        module_type="monthly_budget",
+        title=f"Household Budget ({currency} {income:,.0f}/mo)",
+        budget=income,
+        currency=currency,
+        user_inputs_json=json.dumps({
+            "income": income,
+            "housing_rent": housing_rent,
+            "groceries": groceries,
+            "utilities": utilities,
+            "transport": transport,
+            "dining_entertainment": dining_entertainment,
+            "shopping_lifestyle": shopping_lifestyle,
+            "savings_investments": savings_investments
+        }),
+        plan_result_json=json.dumps(budget_result),
+        user_id=user_id
+    )
+    
+    form_data = {
+        "income": income,
+        "currency": currency,
+        "housing_rent": housing_rent,
+        "groceries": groceries,
+        "utilities": utilities,
+        "transport": transport,
+        "dining_entertainment": dining_entertainment,
+        "shopping_lifestyle": shopping_lifestyle,
+        "savings_investments": savings_investments
+    }
+    
+    return templates.TemplateResponse(
+        request=request,
+        name="monthly_budget.html",
+        context={"user": user, "form_data": form_data, "budget_result": budget_result}
+    )
+
+
+# =========================================================================
+# 4. ENHANCED MODULE 2: TRIP EXPENSE TRACKER
+# =========================================================================
+
+@app.get("/trip-tracker", response_class=HTMLResponse)
+async def trip_tracker_page(request: Request, trip_id: Optional[int] = None):
+    """Trip Expense Tracker hub with active ledger view."""
+    user = get_current_user_optional(request)
+    user_id = user["id"] if user else 1
+    
+    all_trips = get_trips_by_user(user_id=user_id)
+    selected_trip = None
+    
+    if trip_id:
+        selected_trip = get_trip_by_id(trip_id)
+    elif all_trips:
+        selected_trip = get_trip_by_id(all_trips[0]["id"])
+        
+    return templates.TemplateResponse(
+        request=request,
+        name="trip_tracker.html",
+        context={
+            "user": user,
+            "all_trips": all_trips,
+            "selected_trip": selected_trip
+        }
+    )
+
+
+@app.post("/trip-tracker/new")
+async def trip_tracker_create(
+    request: Request,
+    trip_name: str = Form(...),
+    destination: str = Form(...),
+    budget: float = Form(45000.0),
+    currency: str = Form("INR"),
+    start_date: str = Form(""),
+    end_date: str = Form("")
+):
+    """Creates a new trip and redirects to its ledger."""
+    user = get_current_user_optional(request)
+    user_id = user["id"] if user else 1
+    
+    trip_id = create_trip(
+        user_id=user_id,
+        trip_name=trip_name,
+        destination=destination,
+        budget=budget,
+        currency=currency,
+        start_date=start_date,
+        end_date=end_date
+    )
+    
+    # Save a reference to recommendation history
+    save_recommendation(
+        module_type="trip",
+        title=f"Trip: {trip_name} ({destination})",
+        budget=budget,
+        currency=currency,
+        user_inputs_json=json.dumps({"trip_name": trip_name, "destination": destination}),
+        plan_result_json=json.dumps({"trip_id": trip_id, "summary": f"Travel budget cap for {trip_name} set to {currency} {budget:,.2f}."}),
+        user_id=user_id
+    )
+    
+    return RedirectResponse(url=f"/trip-tracker?trip_id={trip_id}", status_code=status.HTTP_302_FOUND)
+
+
+@app.post("/trip-tracker/expense")
+async def trip_tracker_add_expense(
+    request: Request,
+    trip_id: int = Form(...),
+    category: str = Form(...),
+    description: str = Form(...),
+    amount: float = Form(...),
+    expense_date: str = Form("")
+):
+    """Logs an itemized expense into an active trip."""
+    add_trip_expense(
+        trip_id=trip_id,
+        category=category,
+        description=description,
+        amount=amount,
+        expense_date=expense_date
+    )
+    return RedirectResponse(url=f"/trip-tracker?trip_id={trip_id}", status_code=status.HTTP_302_FOUND)
+
+
+# =========================================================================
+# 5. CORE AI PLANNER MODULES (HOME, PARTY, JEWELRY)
 # =========================================================================
 
 # --- A. HOME INTERIOR PLANNER ---

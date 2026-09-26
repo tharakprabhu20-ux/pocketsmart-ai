@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+
+{% block title %}Monthly Household Budget Planner | PocketSmart AI{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 24px;">
+    <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+        <span class="badge badge-budget">📊 Deterministic 50/30/20 Engine</span>
+        <span class="badge badge-success">Fixed & Variable Allocation</span>
+    </div>
+    <h1 style="font-size: 28px; font-weight: 800;">Monthly Household Budget Planner</h1>
+    <p style="color: var(--text-secondary); font-size: 14px;">
+        Input your monthly net income, essential fixed living costs, discretionary lifestyle expenses, and savings targets to compute surpluses and budget health.
+    </p>
+</div>
+
+<div class="grid-2" style="align-items: start; margin-bottom: 40px;">
+    <!-- Left Column: Input Form -->
+    <div class="glass-card">
+        <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 18px;">💵 Household Financial Baseline</h3>
+        
+        <form method="POST" action="/monthly-budget">
+            <div class="form-group">
+                <label class="form-label" for="income">Monthly Net Take-Home Salary / Income</label>
+                <div style="display: flex; gap: 10px;">
+                    <select class="form-select" name="currency" id="currency" style="width: 120px;">
+                        <option value="INR" {% if form_data.currency == 'INR' or not form_data.currency %}selected{% endif %}>₹ INR</option>
+                        <option value="USD" {% if form_data.currency == 'USD' %}selected{% endif %}>$ USD</option>
+                        <option value="EUR" {% if form_data.currency == 'EUR' %}selected{% endif %}>€ EUR</option>
+                        <option value="GBP" {% if form_data.currency == 'GBP' %}selected{% endif %}>£ GBP</option>
+                        <option value="AED" {% if form_data.currency == 'AED' %}selected{% endif %}>AED</option>
+                    </select>
+                    <input class="form-input" type="number" id="income" name="income" min="1000" step="500" value="{{ form_data.income or 75000 }}" required>
+                </div>
+            </div>
+
+            <!-- Fixed Needs Section -->
+            <div style="background: rgba(15, 23, 42, 0.6); padding: 16px; border-radius: 12px; border: 1px solid var(--border-glass); margin-bottom: 18px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <span style="font-size: 13px; font-weight: 800; color: #34D399; text-transform: uppercase;">🟢 Essential Needs (Target: 50%)</span>
+                </div>
+
+                <div class="grid-2" style="gap: 12px;">
+                    <div class="form-group" style="margin-bottom: 10px;">
+                        <label class="form-label" for="housing_rent" style="font-size: 11px;">Rent / Mortgage EMI</label>
+                        <input class="form-input" type="number" id="housing_rent" name="housing_rent" min="0" value="{{ form_data.housing_rent or 20000 }}">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 10px;">
+                        <label class="form-label" for="groceries" style="font-size: 11px;">Groceries & Provisions</label>
+                        <input class="form-input" type="number" id="groceries" name="groceries" min="0" value="{{ form_data.groceries or 10000 }}">
+                    </div>
+                </div>
+
+                <div class="grid-2" style="gap: 12px;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label class="form-label" for="utilities" style="font-size: 11px;">Utilities & Wi-Fi</label>
+                        <input class="form-input" type="number" id="utilities" name="utilities" min="0" value="{{ form_data.utilities or 4000 }}">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label class="form-label" for="transport" style="font-size: 11px;">Transit & Fuel</label>
+                        <input class="form-input" type="number" id="transport" name="transport" min="0" value="{{ form_data.transport or 3500 }}">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Discretionary Wants Section -->
+            <div style="background: rgba(15, 23, 42, 0.6); padding: 16px; border-radius: 12px; border: 1px solid var(--border-glass); margin-bottom: 18px;">
+                <span style="font-size: 13px; font-weight: 800; color: #FBBF24; text-transform: uppercase; display: block; margin-bottom: 12px;">🟡 Discretionary Wants (Target: 30%)</span>
+
+                <div class="grid-2" style="gap: 12px;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label class="form-label" for="dining_entertainment" style="font-size: 11px;">Dining Out & Subscriptions</label>
+                        <input class="form-input" type="number" id="dining_entertainment" name="dining_entertainment" min="0" value="{{ form_data.dining_entertainment or 8000 }}">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label class="form-label" for="shopping_lifestyle" style="font-size: 11px;">Shopping & Hobbies</label>
+                        <input class="form-input" type="number" id="shopping_lifestyle" name="shopping_lifestyle" min="0" value="{{ form_data.shopping_lifestyle or 6000 }}">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Savings & Investments Section -->
+            <div style="background: rgba(15, 23, 42, 0.6); padding: 16px; border-radius: 12px; border: 1px solid var(--border-glass); margin-bottom: 20px;">
+                <span style="font-size: 13px; font-weight: 800; color: #A5B4FC; text-transform: uppercase; display: block; margin-bottom: 12px;">🟣 Savings & Investments (Target: 20%)</span>
+
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label" for="savings_investments" style="font-size: 11px;">Planned Monthly Savings / SIP</label>
+                    <input class="form-input" type="number" id="savings_investments" name="savings_investments" min="0" value="{{ form_data.savings_investments or 15000 }}">
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">📊 Calculate & Save Household Budget</button>
+        </form>
+    </div>
+
+    <!-- Right Column: 50/30/20 Analysis Breakdown -->
+    <div>
+        {% if budget_result %}
+        <div class="glass-card" style="border-color: rgba(16, 185, 129, 0.4); margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 16px;">
+                <div>
+                    <span class="badge badge-budget">Deterministic Evaluation</span>
+                    <h2 style="font-size: 22px; font-weight: 800; margin-top: 6px;">{{ budget_result.plan_title }}</h2>
+                </div>
+                <div style="text-align: right;">
+                    <div style="font-size: 11px; color: var(--text-secondary); text-transform: uppercase;">Net Remaining Flow</div>
+                    <div style="font-size: 22px; font-weight: 800; color: {% if budget_result.net_cash_flow >= 0 %}#34D399{% else %}#F87171{% endif %};">
+                        {{ budget_result.currency }} {{ "{:,.2f}".format(budget_result.net_cash_flow) }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4 Metric summary cards -->
+            <div class="grid-2" style="gap: 12px; margin-bottom: 20px;">
+                <div style="background: rgba(15, 23, 42, 0.6); padding: 12px; border-radius: 10px; border: 1px solid var(--border-glass);">
+                    <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">Monthly Income</div>
+                    <div style="font-size: 18px; font-weight: 800; color: #F8FAFC;">{{ budget_result.currency }} {{ "{:,.2f}".format(budget_result.income) }}</div>
+                </div>
+                <div style="background: rgba(15, 23, 42, 0.6); padding: 12px; border-radius: 10px; border: 1px solid var(--border-glass);">
+                    <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">Total Committed Outflow</div>
+                    <div style="font-size: 18px; font-weight: 800; color: #F8FAFC;">{{ budget_result.currency }} {{ "{:,.2f}".format(budget_result.total_expenses) }}</div>
+                </div>
+            </div>
+
+            <!-- 50/30/20 Benchmarks comparison -->
+            <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 12px;">50/30/20 Framework Compliance</h3>
+            
+            <!-- Needs Bar -->
+            <div style="background: rgba(15, 23, 42, 0.5); padding: 14px; border-radius: 12px; border: 1px solid var(--border-glass); margin-bottom: 12px;">
+                <div style="display: flex; justify-content: space-between; font-size: 13.5px; margin-bottom: 6px;">
+                    <span><b>🟢 Needs (50% Target):</b> {{ budget_result.currency }} {{ "{:,.2f}".format(budget_result.needs_actual) }}</span>
+                    <span style="color: var(--text-muted);">Target: {{ budget_result.currency }} {{ "{:,.2f}".format(budget_result.needs_target) }} ({{ budget_result.needs_pct }}%)</span>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar {% if budget_result.needs_actual <= budget_result.needs_target %}progress-safe{% else %}progress-danger{% endif %}" style="width: {{ [budget_result.needs_pct * 2, 100]|min }}%;"></div>
+                </div>
+                <div style="font-size: 12px; color: {% if budget_result.needs_variance >= 0 %}#34D399{% else %}#F87171{% endif %}; margin-top: 4px;">
+                    {% if budget_result.needs_variance >= 0 %}
+                    ✅ {{ budget_result.currency }} {{ "{:,.2f}".format(budget_result.needs_variance) }} surplus headroom
+                    {% else %}
+                    ⚠️ {{ budget_result.currency }} {{ "{:,.2f}".format(budget_result.needs_variance|abs) }} over benchmark target
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Wants Bar -->
+            <div style="background: rgba(15, 23, 42, 0.5); padding: 14px; border-radius: 12px; border: 1px solid var(--border-glass); margin-bottom: 12px;">
+                <div style="display: flex; justify-content: space-between; font-size: 13.5px; margin-bottom: 6px;">
+                    <span><b>🟡 Wants (30% Target):</b> {{ budget_result.currency }} {{ "{:,.2f}".format(budget_result.wants_actual) }}</span>
+                    <span style="color: var(--text-muted);">Target: {{ budget_result.currency }} {{ "{:,.2f}".format(budget_result.wants_target) }} ({{ budget_result.wants_pct }}%)</span>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar {% if budget_result.wants_actual <= budget_result.wants_target %}progress-warning{% else %}progress-danger{% endif %}" style="width: {{ [budget_result.wants_pct * 3.33, 100]|min }}%;"></div>
+                </div>
+                <div style="font-size: 12px; color: {% if budget_result.wants_variance >= 0 %}#34D399{% else %}#F87171{% endif %}; margin-top: 4px;">
+                    {% if budget_result.wants_variance >= 0 %}
+                    ✅ {{ budget_result.currency }} {{ "{:,.2f}".format(budget_result.wants_variance) }} lifestyle buffer remaining
+                    {% else %}
+                    ⚠️ {{ budget_result.currency }} {{ "{:,.2f}".format(budget_result.wants_variance|abs) }} exceeding lifestyle target
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Savings Bar -->
+            <div style="background: rgba(15, 23, 42, 0.5); padding: 14px; border-radius: 12px; border: 1px solid var(--border-glass); margin-bottom: 18px;">
+                <div style="display: flex; justify-content: space-between; font-size: 13.5px; margin-bottom: 6px;">
+                    <span><b>🟣 Savings (20% Target):</b> {{ budget_result.currency }} {{ "{:,.2f}".format(budget_result.savings_actual) }}</span>
+                    <span style="color: var(--text-muted);">Target: {{ budget_result.currency }} {{ "{:,.2f}".format(budget_result.savings_target) }} ({{ budget_result.savings_pct }}%)</span>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar progress-safe" style="width: {{ [budget_result.savings_pct * 5, 100]|min }}%;"></div>
+                </div>
+                <div style="font-size: 12px; color: {% if budget_result.savings_variance >= 0 %}#34D399{% else %}#F87171{% endif %}; margin-top: 4px;">
+                    {% if budget_result.savings_variance >= 0 %}
+                    🌟 Exceeding 20% savings target by {{ budget_result.currency }} {{ "{:,.2f}".format(budget_result.savings_variance) }}
+                    {% else %}
+                    💡 {{ budget_result.currency }} {{ "{:,.2f}".format(budget_result.savings_variance|abs) }} short of the 20% savings target
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Financial Diagnostic Verdict -->
+            <div style="background: rgba(30, 41, 59, 0.6); border: 1px solid var(--border-glass); border-radius: 12px; padding: 14px;">
+                <div style="font-size: 12px; font-weight: 800; color: #38BDF8; text-transform: uppercase; margin-bottom: 4px;">🩺 Household Health Verdict</div>
+                <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.5; margin: 0;">
+                    {{ budget_result.summary }}
+                </p>
+            </div>
+        </div>
+        {% else %}
+        <!-- Initial Blank Slate State -->
+        <div class="glass-card" style="text-align: center; padding: 48px 24px;">
+            <div style="font-size: 48px; margin-bottom: 16px;">📊</div>
+            <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 8px;">Household Budget Overview</h3>
+            <p style="color: var(--text-secondary); font-size: 13.5px; max-width: 400px; margin: 0 auto 20px auto; line-height: 1.6;">
+                Fill in your income and expense categories on the left to evaluate your household's exact 50/30/20 balance and cash flow surpluses.
+            </p>
+            <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+                <span class="badge badge-budget">50% Needs</span>
+                <span class="badge badge-party">30% Wants</span>
+                <span class="badge badge-jewelry">20% Savings</span>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -14,6 +14,10 @@
                     <span class="badge badge-party">🎉 Party & Event Plan</span>
                 {% elif plan.module_type == 'jewelry' %}
                     <span class="badge badge-jewelry">💎 Jewelry & Outfit Styling</span>
+                {% elif plan.module_type == 'monthly_budget' %}
+                    <span class="badge badge-budget">📊 Household Budget Plan</span>
+                {% elif plan.module_type == 'trip' %}
+                    <span class="badge badge-trip">✈️ Trip Expense Plan</span>
                 {% endif %}
                 <span class="badge badge-success">Saved Log #{{ plan.id }}</span>
             </div>
@@ -47,6 +51,28 @@
     <div style="margin-bottom: 24px;">
         <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 6px;">Outfit Color & Neckline Analysis</h3>
         <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.6;">{{ details.outfit_analysis }}</p>
+    </div>
+    {% endif %}
+
+    <!-- MONTHLY HOUSEHOLD BUDGET DETAILS -->
+    {% if plan.module_type == 'monthly_budget' %}
+    <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 16px;">50/30/20 Household Breakdown</h3>
+    <div class="grid-3" style="margin-bottom: 20px;">
+        <div style="background: rgba(15, 23, 42, 0.6); padding: 14px; border-radius: 12px; border: 1px solid var(--border-glass);">
+            <div style="font-size: 12px; font-weight: 700; color: #34D399; text-transform: uppercase;">🟢 Needs (50% Target)</div>
+            <div style="font-size: 18px; font-weight: 800; color: #F8FAFC; margin: 4px 0;">{{ plan.currency }} {{ "{:,.2f}".format(details.needs_actual or 0.0) }}</div>
+            <div style="font-size: 12px; color: var(--text-muted);">Target: {{ plan.currency }} {{ "{:,.2f}".format(details.needs_target or 0.0) }}</div>
+        </div>
+        <div style="background: rgba(15, 23, 42, 0.6); padding: 14px; border-radius: 12px; border: 1px solid var(--border-glass);">
+            <div style="font-size: 12px; font-weight: 700; color: #FBBF24; text-transform: uppercase;">🟡 Wants (30% Target)</div>
+            <div style="font-size: 18px; font-weight: 800; color: #F8FAFC; margin: 4px 0;">{{ plan.currency }} {{ "{:,.2f}".format(details.wants_actual or 0.0) }}</div>
+            <div style="font-size: 12px; color: var(--text-muted);">Target: {{ plan.currency }} {{ "{:,.2f}".format(details.wants_target or 0.0) }}</div>
+        </div>
+        <div style="background: rgba(15, 23, 42, 0.6); padding: 14px; border-radius: 12px; border: 1px solid var(--border-glass);">
+            <div style="font-size: 12px; font-weight: 700; color: #A5B4FC; text-transform: uppercase;">🟣 Savings (20% Target)</div>
+            <div style="font-size: 18px; font-weight: 800; color: #F8FAFC; margin: 4px 0;">{{ plan.currency }} {{ "{:,.2f}".format(details.savings_actual or 0.0) }}</div>
+            <div style="font-size: 12px; color: var(--text-muted);">Target: {{ plan.currency }} {{ "{:,.2f}".format(details.savings_target or 0.0) }}</div>
+        </div>
     </div>
     {% endif %}
 

@@ -20,12 +20,14 @@
 
         <div class="nav-links">
             <a href="/" class="nav-link">🏠 Home</a>
+            <a href="/monthly-budget" class="nav-link">📊 Household Budget</a>
+            <a href="/trip-tracker" class="nav-link">✈️ Trip Tracker</a>
             <a href="/home-budget" class="nav-link">🛋️ Home Interior</a>
             <a href="/party-budget" class="nav-link">🎉 Party Planner</a>
             <a href="/jewelry-budget" class="nav-link">💎 Jewelry Stylist</a>
             
             {% if user %}
-                <a href="/dashboard" class="nav-link">📊 Dashboard</a>
+                <a href="/dashboard" class="nav-link">📈 Dashboard</a>
                 <a href="/history" class="nav-link">📜 History</a>
                 <div class="nav-user">
                     <span class="badge badge-success">👤 {{ user.full_name }}</span>
@@ -51,31 +53,33 @@
                     <div class="brand-icon">💳</div>
                     <div>
                         <div class="brand-title">PocketSmart AI</div>
-                        <div class="brand-subtitle">Intelligent FinTech & AI Planning</div>
+                        <div class="brand-subtitle">Intelligent FinTech & Lifestyle Planners</div>
                     </div>
                 </div>
                 <p style="color: var(--text-secondary); font-size: 13.5px; line-height: 1.6; max-width: 340px;">
-                    Empowering households, event hosts, and shoppers with deterministic budgeting, multimodal vision intelligence, and direct retail integrations.
+                    Empowering households, travelers, event hosts, and shoppers with deterministic budgeting, multimodal vision intelligence, and direct retail integrations.
                 </p>
             </div>
 
             <div class="footer-col">
-                <h4>AI Planners</h4>
+                <h4>Core & Lifestyle Planners</h4>
                 <ul>
+                    <li><a href="/monthly-budget">📊 Monthly Household Budget</a></li>
+                    <li><a href="/trip-tracker">✈️ Trip & Vacation Tracker</a></li>
                     <li><a href="/home-budget">🛋️ Home Interior Planner</a></li>
                     <li><a href="/party-budget">🎉 Party & Event Planner</a></li>
                     <li><a href="/jewelry-budget">💎 Jewelry & Outfit Stylist</a></li>
-                    <li><a href="/dashboard">📊 Financial Dashboard</a></li>
                 </ul>
             </div>
 
             <div class="footer-col">
-                <h4>Retail Partners</h4>
+                <h4>Retail & Travel Partners</h4>
                 <ul>
                     <li><a href="https://www.amazon.in" target="_blank">Amazon & Flipkart</a></li>
                     <li><a href="https://www.ikea.com" target="_blank">IKEA & Pepperfry</a></li>
                     <li><a href="https://www.tanishq.co.in" target="_blank">Tanishq & CaratLane</a></li>
                     <li><a href="https://www.swiggy.com" target="_blank">Swiggy & Zomato</a></li>
+                    <li><a href="https://www.booking.com" target="_blank">Booking.com & OYO</a></li>
                 </ul>
             </div>
 
@@ -86,7 +90,7 @@
                 </p>
                 <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                     <span class="badge badge-home">FastAPI 0.141</span>
-                    <span class="badge badge-party">Gemini Vision</span>
+                    <span class="badge badge-party">Gemini 3.8 Flash</span>
                     <span class="badge badge-jewelry">Bcrypt Auth</span>
                 </div>
             </div>

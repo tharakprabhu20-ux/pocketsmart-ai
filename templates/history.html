@@ -6,14 +6,15 @@
 <div style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
     <div>
         <div style="display: flex; gap: 8px; margin-bottom: 8px;">
-            <span class="badge badge-home">📜 Saved Queries & Plans</span>
+            <span class="badge badge-home">📜 Saved Plans & Historical Logs</span>
         </div>
-        <h1 style="font-size: 28px; font-weight: 800;">Recommendation History</h1>
-        <p style="color: var(--text-secondary); font-size: 14px;">Review and revisit your previously generated budget allocations and product recommendations.</p>
+        <h1 style="font-size: 28px; font-weight: 800;">Master Recommendation History</h1>
+        <p style="color: var(--text-secondary); font-size: 14px;">Review and revisit your previously generated budget plans across all 5 AI and manual planners.</p>
     </div>
     
-    <div style="display: flex; gap: 8px;">
+    <div style="display: flex; gap: 6px; flex-wrap: wrap;">
         <a href="/history" class="btn btn-secondary btn-sm {% if not current_module %}btn-primary{% endif %}">All Planners</a>
+        <a href="/history?module=monthly_budget" class="btn btn-secondary btn-sm {% if current_module == 'monthly_budget' %}btn-primary{% endif %}">📊 Monthly</a>
         <a href="/history?module=home" class="btn btn-secondary btn-sm {% if current_module == 'home' %}btn-primary{% endif %}">🛋️ Home</a>
         <a href="/history?module=party" class="btn btn-secondary btn-sm {% if current_module == 'party' %}btn-primary{% endif %}">🎉 Party</a>
         <a href="/history?module=jewelry" class="btn btn-secondary btn-sm {% if current_module == 'jewelry' %}btn-primary{% endif %}">💎 Jewelry</a>
@@ -43,6 +44,10 @@
                             <span class="badge badge-party">🎉 Party & Event</span>
                         {% elif plan.module_type == 'jewelry' %}
                             <span class="badge badge-jewelry">💎 Jewelry Stylist</span>
+                        {% elif plan.module_type == 'monthly_budget' %}
+                            <span class="badge badge-budget">📊 Household Budget</span>
+                        {% elif plan.module_type == 'trip' %}
+                            <span class="badge badge-trip">✈️ Trip Plan</span>
                         {% else %}
                             <span class="badge">{{ plan.module_type }}</span>
                         {% endif %}
@@ -68,9 +73,11 @@
     <div style="padding: 48px 24px; text-align: center; color: var(--text-secondary);">
         <div style="font-size: 36px; margin-bottom: 12px;">📑</div>
         <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 6px;">No Saved Plans Found</h3>
-        <p style="font-size: 13.5px; margin-bottom: 18px;">Start by generating a recommendation plan using one of the specialized AI engines.</p>
+        <p style="font-size: 13.5px; margin-bottom: 18px;">Start by generating a plan or budget using one of our lifestyle and financial engines.</p>
         <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
-            <a href="/home-budget" class="btn btn-primary btn-sm">🛋️ Home Planner</a>
+            <a href="/monthly-budget" class="btn btn-primary btn-sm">📊 Monthly Budget</a>
+            <a href="/trip-tracker" class="btn btn-secondary btn-sm">✈️ Trip Tracker</a>
+            <a href="/home-budget" class="btn btn-secondary btn-sm">🛋️ Home Planner</a>
             <a href="/party-budget" class="btn btn-secondary btn-sm">🎉 Party Planner</a>
             <a href="/jewelry-budget" class="btn btn-secondary btn-sm">💎 Jewelry Stylist</a>
         </div>

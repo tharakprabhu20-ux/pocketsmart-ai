@@ -123,6 +123,45 @@ def test_monthly_household_budget_post():
     assert "50/30/20 Framework Compliance" in resp.text
 
 
+def test_home_budget_post():
+    """Verifies POST /home-budget executes AI generation and renders room allocations."""
+    resp = client.post(
+        "/home-budget",
+        data={
+            "budget": 150000.0,
+            "currency": "INR",
+            "rooms": ["Living Room", "Master Bedroom"],
+            "style_preference": "Modern Minimalist",
+            "lighting_count": 6,
+            "fan_count": 3,
+            "furniture": ["3-Seater Sofa", "Queen Size Bed"],
+            "special_notes": "Pet-friendly fabrics"
+        }
+    )
+    assert resp.status_code == 200
+    assert "Living Room" in resp.text
+    assert "Find on:" in resp.text
+
+
+def test_party_budget_post():
+    """Verifies POST /party-budget computes catering and decor allocations."""
+    resp = client.post(
+        "/party-budget",
+        data={
+            "budget": 50000.0,
+            "currency": "INR",
+            "event_type": "Birthday Party",
+            "guest_count": 25,
+            "venue_type": "Rooftop Lounge / Banquet",
+            "catering_style": "Buffet Dinner + Mocktails",
+            "decor_theme": "Modern Neon",
+            "special_requests": ""
+        }
+    )
+    assert resp.status_code == 200
+    assert "Explore on:" in resp.text
+
+
 def test_trip_tracker_flow():
     """Verifies creating a trip and logging an itemized expense."""
     # 1. Create Trip

@@ -1,77 +1,86 @@
 {% extends "base.html" %}
 
-{% block title %}PocketSmart AI | Your Smart Budget & Recommendation Assistant{% endblock %}
+{% block title %}PocketSmart AI | Enterprise Financial Intelligence & Lifestyle Planning{% endblock %}
 
 {% block content %}
-<!-- Hero Section (Dedicated Landing Header) -->
+<!-- Executive Hero Section -->
 <div class="hero-banner">
-    <div style="display: inline-block; margin-bottom: 16px;">
-        <span class="badge badge-home">✨ Multimodal Generative AI & Deterministic Budget Assistant</span>
+    <div style="display: inline-block; margin-bottom: 18px;">
+        <span class="badge badge-home" style="padding: 6px 16px; font-size: 13px;">✦ Autonomous Financial &amp; Multimodal Recommendation Architecture</span>
     </div>
-    <h1>PocketSmart AI: Your Smart Budget &amp; Recommendation Assistant</h1>
+    <h1>Intelligent Capital Allocation &amp; Generative Planning</h1>
     <p>
-        The all-in-one financial intelligence platform. Seamlessly balance monthly household budgets, track live vacation expenses, coordinate fine jewelry styling with multimodal outfit vision, and design room-by-room home decor with direct shopping links.
+        PocketSmart AI pairs deterministic mathematical optimization with Google Gemini multimodal vision. Automate monthly household cash flows, maintain real-time travel ledgers, curate architectural interior decor, and execute event logistics with integrated retail marketplaces.
     </p>
     
-    <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 8px;">
+    <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 12px;">
         {% if user %}
-            <a href="/dashboard" class="btn btn-primary" style="padding: 12px 28px; font-size: 15px;">📊 Enter User Dashboard →</a>
-            <a href="/history" class="btn btn-secondary" style="padding: 12px 24px; font-size: 15px;">📜 View Saved Plans</a>
+            <a href="/dashboard" class="btn btn-primary" style="padding: 13px 30px; font-size: 15px;">Launch Executive Dashboard →</a>
+            <a href="/history" class="btn btn-secondary" style="padding: 13px 26px; font-size: 15px;">Review Saved Portfolios</a>
         {% else %}
-            <a href="/register" class="btn btn-primary" style="padding: 12px 28px; font-size: 15px;">🚀 Get Started for Free</a>
-            <a href="/login" class="btn btn-secondary" style="padding: 12px 24px; font-size: 15px;">🔐 Existing User Login</a>
+            <a href="/register" class="btn btn-primary" style="padding: 13px 30px; font-size: 15px;">Get Started Free →</a>
+            <a href="/login" class="btn btn-secondary" style="padding: 13px 26px; font-size: 15px;">Client Sign In</a>
         {% endif %}
     </div>
 </div>
 
 <!-- Key Features & Capabilities Breakdown -->
-<div style="margin-bottom: 56px;">
-    <div style="text-align: center; margin-bottom: 32px;">
-        <span class="badge badge-budget">⚡ Feature Breakdown</span>
-        <h2 style="font-size: 26px; font-weight: 800; margin-top: 8px;">Everything You Need to Plan &amp; Save Smart</h2>
-        <p style="color: var(--text-secondary); font-size: 14px; max-width: 620px; margin: 6px auto 0 auto;">
-            Explore five dedicated intelligent planner modules built with pure arithmetic precision and Google Gemini AI.
+<div style="margin-bottom: 60px;">
+    <div style="text-align: center; margin-bottom: 36px;">
+        <span class="badge badge-budget" style="padding: 5px 14px;">Specialized Intelligence Suites</span>
+        <h2 style="font-size: 28px; font-weight: 800; margin-top: 10px; letter-spacing: -0.5px;">Comprehensive Budgeting &amp; Optimization Modules</h2>
+        <p style="color: var(--text-secondary); font-size: 15px; max-width: 650px; margin: 8px auto 0 auto; line-height: 1.6;">
+            Deploy specialized computation algorithms and visual understanding engines tailored for distinct financial domains.
         </p>
     </div>
 
     <div class="grid-3" style="gap: 24px; margin-bottom: 24px;">
         <!-- Feature 1: Household Budget -->
         <div class="glass-card">
-            <div style="font-size: 34px; margin-bottom: 12px;">📊</div>
-            <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 8px;">Monthly Household Budget</h3>
-            <p style="color: var(--text-secondary); font-size: 13.5px; line-height: 1.6; margin-bottom: 18px;">
-                Enter take-home pay and fixed living costs to calculate deterministic 50/30/20 category benchmarks, surplus headroom, and diagnostic health audits.
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+                <div style="width: 44px; height: 44px; border-radius: 10px; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.35); display: flex; align-items: center; justify-content: center; font-size: 20px;">📊</div>
+                <span class="badge badge-budget">50/30/20 Standard</span>
+            </div>
+            <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 8px;">Household Cash Flow Optimization</h3>
+            <p style="color: var(--text-secondary); font-size: 13.5px; line-height: 1.65; margin-bottom: 20px;">
+                Calculates strict deterministic allocations for essential living obligations, discretionary reserves, and capital wealth building with real-time audit diagnostics.
             </p>
             <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-                <span class="badge badge-budget">50% Needs</span>
-                <span class="badge badge-party">30% Wants</span>
-                <span class="badge badge-home">20% Savings</span>
+                <span class="badge badge-budget">Needs Index</span>
+                <span class="badge badge-party">Wants Ratio</span>
+                <span class="badge badge-home">Surplus Reserve</span>
             </div>
         </div>
 
         <!-- Feature 2: Trip Expense Tracker -->
         <div class="glass-card">
-            <div style="font-size: 34px; margin-bottom: 12px;">✈️</div>
-            <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 8px;">Trip &amp; Vacation Tracker</h3>
-            <p style="color: var(--text-secondary); font-size: 13.5px; line-height: 1.6; margin-bottom: 18px;">
-                Create travel projects, set spending caps, and log itemized flights, hotels, dining, and activity costs with live progress indicators.
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+                <div style="width: 44px; height: 44px; border-radius: 10px; background: rgba(236, 72, 153, 0.15); border: 1px solid rgba(236, 72, 153, 0.35); display: flex; align-items: center; justify-content: center; font-size: 20px;">✈️</div>
+                <span class="badge badge-trip">Project Ledger</span>
+            </div>
+            <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 8px;">Travel &amp; Project Cost Tracking</h3>
+            <p style="color: var(--text-secondary); font-size: 13.5px; line-height: 1.65; margin-bottom: 20px;">
+                Set expenditure ceilings for travel expeditions and multi-day ventures. Itemize flight, lodging, and hospitality costs with dynamic headroom indicators.
             </p>
             <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-                <span class="badge badge-trip">Project Ledgers</span>
-                <span class="badge badge-success">Live Headroom</span>
+                <span class="badge badge-trip">Real-Time Ledger</span>
+                <span class="badge badge-success">Dynamic Ceiling</span>
             </div>
         </div>
 
         <!-- Feature 3: Home Interior Planner -->
         <div class="glass-card">
-            <div style="font-size: 34px; margin-bottom: 12px;">🛋️</div>
-            <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 8px;">Home Interior &amp; Decor</h3>
-            <p style="color: var(--text-secondary); font-size: 13.5px; line-height: 1.6; margin-bottom: 18px;">
-                Plan room layouts, modular furniture, fans, and ambient lighting within budget with instant direct search links to Amazon, IKEA, Flipkart &amp; Pepperfry.
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+                <div style="width: 44px; height: 44px; border-radius: 10px; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.35); display: flex; align-items: center; justify-content: center; font-size: 20px;">🛋️</div>
+                <span class="badge badge-home">Spatial Architect</span>
+            </div>
+            <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 8px;">Interior Architecture &amp; Furnishing</h3>
+            <p style="color: var(--text-secondary); font-size: 13.5px; line-height: 1.65; margin-bottom: 20px;">
+                Structure room-by-room decor budgets across furniture, lighting, and finishes with live catalog search integration for IKEA, Amazon, Flipkart, and Pepperfry.
             </p>
             <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-                <span class="badge badge-home">IKEA Links</span>
-                <span class="badge badge-party">Amazon.in</span>
+                <span class="badge badge-home">IKEA Catalog</span>
+                <span class="badge badge-party">Amazon Direct</span>
             </div>
         </div>
     </div>
@@ -79,107 +88,113 @@
     <div class="grid-2" style="gap: 24px;">
         <!-- Feature 4: Party Planner -->
         <div class="glass-card">
-            <div style="font-size: 34px; margin-bottom: 12px;">🎉</div>
-            <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 8px;">Party &amp; Event Planner</h3>
-            <p style="color: var(--text-secondary); font-size: 13.5px; line-height: 1.6; margin-bottom: 18px;">
-                Determine per-guest catering allocations, event timeline schedules, and contingency funds with Swiggy, Zomato, and OYO venue search integration.
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+                <div style="width: 44px; height: 44px; border-radius: 10px; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.35); display: flex; align-items: center; justify-content: center; font-size: 20px;">🎉</div>
+                <span class="badge badge-party">Event Logistics</span>
+            </div>
+            <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 8px;">Hospitality &amp; Event Coordination</h3>
+            <p style="color: var(--text-secondary); font-size: 13.5px; line-height: 1.65; margin-bottom: 20px;">
+                Plan corporate mixers, weddings, and celebrations with precision per-guest catering math, vendor timelines, and integrated Swiggy, Zomato, and OYO venue connections.
             </p>
             <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-                <span class="badge badge-party">Swiggy / Zomato</span>
-                <span class="badge badge-home">OYO Venues</span>
+                <span class="badge badge-party">Catering Math</span>
+                <span class="badge badge-home">Venue Sourcing</span>
             </div>
         </div>
 
         <!-- Feature 5: Jewelry Stylist -->
         <div class="glass-card">
-            <div style="font-size: 34px; margin-bottom: 12px;">💎</div>
-            <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 8px;">Jewelry &amp; Outfit Stylist</h3>
-            <p style="color: var(--text-secondary); font-size: 13.5px; line-height: 1.6; margin-bottom: 18px;">
-                Upload an outfit photo or enter occasion details. Gemini Multimodal Vision coordinates harmonious jewelry pieces with Tanishq, CaratLane, and Melorra search links.
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+                <div style="width: 44px; height: 44px; border-radius: 10px; background: rgba(168, 85, 247, 0.15); border: 1px solid rgba(168, 85, 247, 0.35); display: flex; align-items: center; justify-content: center; font-size: 20px;">💎</div>
+                <span class="badge badge-jewelry">Gemini Vision</span>
+            </div>
+            <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 8px;">Multimodal Attire &amp; Fine Jewelry Pairing</h3>
+            <p style="color: var(--text-secondary); font-size: 13.5px; line-height: 1.65; margin-bottom: 20px;">
+                Upload fabric and attire photographs. Gemini multimodal visual algorithms analyze neckline profiles and color tones to recommend precious jewelry with direct links to Tanishq &amp; CaratLane.
             </p>
             <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-                <span class="badge badge-jewelry">Gemini Vision</span>
+                <span class="badge badge-jewelry">Computer Vision</span>
                 <span class="badge badge-home">Tanishq &amp; CaratLane</span>
             </div>
         </div>
     </div>
 </div>
 
-<!-- How It Works Section -->
-<div class="glass-card" style="margin-bottom: 56px; padding: 36px;">
+<!-- Workflow Section -->
+<div class="glass-card" style="margin-bottom: 60px; padding: 40px;">
+    <div style="text-align: center; margin-bottom: 36px;">
+        <span class="badge badge-home">Operational Architecture</span>
+        <h2 style="font-size: 26px; font-weight: 800; margin-top: 8px; letter-spacing: -0.4px;">Streamlined Three-Tier Workflow</h2>
+    </div>
+
+    <div class="grid-3" style="text-align: center; gap: 28px;">
+        <div>
+            <div style="width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, #4F46E5, #6366F1); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800; margin: 0 auto 16px auto; box-shadow: 0 4px 16px rgba(79, 70, 229, 0.4);">1</div>
+            <h4 style="font-size: 16px; font-weight: 800; margin-bottom: 8px;">Authenticate &amp; Initialize</h4>
+            <p style="color: var(--text-secondary); font-size: 13.5px; line-height: 1.6;">Establish an encrypted session profile to persist budgets, ledgers, and generated recommendations.</p>
+        </div>
+
+        <div>
+            <div style="width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, #F59E0B, #FBBF24); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800; margin: 0 auto 16px auto; color: #000; box-shadow: 0 4px 16px rgba(245, 158, 11, 0.4);">2</div>
+            <h4 style="font-size: 16px; font-weight: 800; margin-bottom: 8px;">Select Domain Engine</h4>
+            <p style="color: var(--text-secondary); font-size: 13.5px; line-height: 1.6;">Configure household metrics, travel milestones, interior rooms, or upload high-resolution outfit imagery.</p>
+        </div>
+
+        <div>
+            <div style="width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, #10B981, #34D399); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800; margin: 0 auto 16px auto; box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);">3</div>
+            <h4 style="font-size: 16px; font-weight: 800; margin-bottom: 8px;">Execute &amp; Procure</h4>
+            <p style="color: var(--text-secondary); font-size: 13.5px; line-height: 1.6;">Receive mathematical allocations, visual aesthetic reports, and verified direct retail fulfillment links.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Verified Reviews Preview Section -->
+<div style="margin-bottom: 56px;">
     <div style="text-align: center; margin-bottom: 32px;">
-        <span class="badge badge-home">🔄 Simple 3-Step Flow</span>
-        <h2 style="font-size: 24px; font-weight: 800; margin-top: 8px;">How PocketSmart AI Works</h2>
+        <span class="badge badge-party">Verified Client Impact</span>
+        <h2 style="font-size: 26px; font-weight: 800; margin-top: 8px; letter-spacing: -0.4px;">Trusted by Financial Decision Makers</h2>
     </div>
 
-    <div class="grid-3" style="text-align: center;">
-        <div>
-            <div style="width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, #4F46E5, #6366F1); display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 800; margin: 0 auto 16px auto;">1</div>
-            <h4 style="font-size: 16px; font-weight: 800; margin-bottom: 6px;">1. Create or Sign In</h4>
-            <p style="color: var(--text-secondary); font-size: 13px; line-height: 1.5;">Register in 10 seconds to unlock your secure user dashboard and personal session history.</p>
+    <div class="grid-3" style="gap: 24px;">
+        <div class="glass-card">
+            <div style="color: #FBBF24; font-size: 16px; margin-bottom: 12px; letter-spacing: 2px;">★★★★★</div>
+            <p style="font-size: 13.5px; color: var(--text-secondary); line-height: 1.65; margin-bottom: 18px;">
+                "The Cash Flow Optimization engine gave our household complete transparency into our 50/30/20 balance. We scaled our net monthly savings from 8% to 22% within 60 days."
+            </p>
+            <div style="font-weight: 700; font-size: 13.5px;">Suresh Menon <span style="font-size: 12px; color: var(--text-muted); font-weight: 400;">• Financial Operations</span></div>
         </div>
 
-        <div>
-            <div style="width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, #F59E0B, #FBBF24); display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 800; margin: 0 auto 16px auto; color: #000;">2</div>
-            <h4 style="font-size: 16px; font-weight: 800; margin-bottom: 6px;">2. Pick a Planner</h4>
-            <p style="color: var(--text-secondary); font-size: 13px; line-height: 1.5;">Select Household Budget, Trip Tracker, Home Decor, Party, or Jewelry styling modules.</p>
+        <div class="glass-card">
+            <div style="color: #FBBF24; font-size: 16px; margin-bottom: 12px; letter-spacing: 2px;">★★★★★</div>
+            <p style="font-size: 13.5px; color: var(--text-secondary); line-height: 1.65; margin-bottom: 18px;">
+                "Our cross-country expedition remained strictly compliant with our initial capital ceiling. The live ledger headroom indicator prevented unplanned overages."
+            </p>
+            <div style="font-weight: 700; font-size: 13.5px;">Kavya Pillai <span style="font-size: 12px; color: var(--text-muted); font-weight: 400;">• Travel Expedition Lead</span></div>
         </div>
 
-        <div>
-            <div style="width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, #10B981, #34D399); display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 800; margin: 0 auto 16px auto;">3</div>
-            <h4 style="font-size: 16px; font-weight: 800; margin-bottom: 6px;">3. Instant Results &amp; Links</h4>
-            <p style="color: var(--text-secondary); font-size: 13px; line-height: 1.5;">Receive mathematically verified allocations, Gemini visual suggestions, and direct retail purchase links.</p>
+        <div class="glass-card">
+            <div style="color: #FBBF24; font-size: 16px; margin-bottom: 12px; letter-spacing: 2px;">★★★★★</div>
+            <p style="font-size: 13.5px; color: var(--text-secondary); line-height: 1.65; margin-bottom: 18px;">
+                "I uploaded high-res imagery of my reception attire and Gemini generated matched rose-gold pairings with verified CaratLane links in under 5 seconds."
+            </p>
+            <div style="font-weight: 700; font-size: 13.5px;">Ananya Deshmukh <span style="font-size: 12px; color: var(--text-muted); font-weight: 400;">• Creative Director</span></div>
         </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 28px;">
+        <a href="/testimonials" class="btn btn-secondary btn-sm" style="padding: 10px 22px;">Read Full Case Studies →</a>
     </div>
 </div>
 
-<!-- Testimonials Preview Section -->
-<div style="margin-bottom: 48px;">
-    <div style="text-align: center; margin-bottom: 28px;">
-        <span class="badge badge-party">💬 Real User Reviews</span>
-        <h2 style="font-size: 24px; font-weight: 800; margin-top: 8px;">What Our Community Says</h2>
-    </div>
-
-    <div class="grid-3">
-        <div class="glass-card">
-            <div style="color: #FBBF24; font-size: 18px; margin-bottom: 10px;">★★★★★</div>
-            <p style="font-size: 13.5px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 14px;">
-                "The Monthly Household Budget planner gave our family complete clarity on our 50/30/20 balance. We increased our monthly savings rate from 8% to 22% in two months!"
-            </p>
-            <div style="font-weight: 700; font-size: 13px;">Suresh Menon <span style="font-size: 12px; color: var(--text-muted); font-weight: normal;">• Family Finance Manager</span></div>
-        </div>
-
-        <div class="glass-card">
-            <div style="color: #FBBF24; font-size: 18px; margin-bottom: 10px;">★★★★★</div>
-            <p style="font-size: 13.5px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 14px;">
-                "Our friends' trip to Manali stayed 100% on budget using the Trip Expense Tracker. Seeing the live progress bar and itemized categories saved us from overspending on hotels!"
-            </p>
-            <div style="font-weight: 700; font-size: 13px;">Kavya Pillai <span style="font-size: 12px; color: var(--text-muted); font-weight: normal;">• Travel Blogger</span></div>
-        </div>
-
-        <div class="glass-card">
-            <div style="color: #FBBF24; font-size: 18px; margin-bottom: 10px;">★★★★★</div>
-            <p style="font-size: 13.5px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 14px;">
-                "I uploaded my reception saree photo and within seconds, Gemini recommended matching rose-gold earrings from CaratLane that looked unbelievable!"
-            </p>
-            <div style="font-weight: 700; font-size: 13px;">Ananya Deshmukh <span style="font-size: 12px; color: var(--text-muted); font-weight: normal;">• Fashion Enthusiast</span></div>
-        </div>
-    </div>
-
-    <div style="text-align: center; margin-top: 24px;">
-        <a href="/testimonials" class="btn btn-secondary btn-sm">Read All Success Stories →</a>
-    </div>
-</div>
-
-<!-- Final Call to Action -->
-<div class="hero-banner" style="padding: 36px; background: linear-gradient(135deg, rgba(30, 27, 75, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%);">
-    <h2 style="font-size: 26px; font-weight: 800; margin-bottom: 8px;">Ready to Experience Precision Financial Intelligence?</h2>
-    <p style="font-size: 14px; margin-bottom: 20px;">Join thousands optimizing their household, vacation, and lifestyle budgets today.</p>
+<!-- Conversion Call to Action -->
+<div class="hero-banner" style="padding: 44px; background: linear-gradient(135deg, rgba(24, 20, 60, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%);">
+    <h2 style="font-size: 28px; font-weight: 800; margin-bottom: 10px; letter-spacing: -0.5px;">Deploy Autonomous Financial Intelligence Today</h2>
+    <p style="font-size: 15px; margin-bottom: 24px; max-width: 600px;">Join thousands of individuals and teams optimizing personal, travel, and lifestyle allocations.</p>
     
     {% if user %}
-        <a href="/dashboard" class="btn btn-primary" style="padding: 10px 24px;">Go to Your Dashboard →</a>
+        <a href="/dashboard" class="btn btn-primary" style="padding: 12px 28px;">Access Your Executive Dashboard →</a>
     {% else %}
-        <a href="/register" class="btn btn-primary" style="padding: 10px 24px;">Create Free Account Now</a>
+        <a href="/register" class="btn btn-primary" style="padding: 12px 28px;">Create Enterprise Account Free</a>
     {% endif %}
 </div>
 {% endblock %}

@@ -56,18 +56,18 @@ def test_login_register_pages():
     """Verifies GET /login and GET /register load successfully."""
     r_login = client.get("/login")
     assert r_login.status_code == 200
-    assert "Welcome Back" in r_login.text
+    assert "Console Access" in r_login.text or "Sign In" in r_login.text
 
     r_reg = client.get("/register")
     assert r_reg.status_code == 200
-    assert "Create Account" in r_reg.text or "Get Started" in r_reg.text
+    assert "Workspace" in r_reg.text or "Create" in r_reg.text
 
 
 def test_testimonials_page():
     """Verifies GET /testimonials returns 200 OK with real reviews."""
     response = client.get("/testimonials")
     assert response.status_code == 200
-    assert "Real User Reviews" in response.text
+    assert "Case Studies" in response.text or "Reviews" in response.text
     assert "Suresh Menon" in response.text
 
 

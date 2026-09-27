@@ -1,81 +1,85 @@
 {% extends "base.html" %}
 
-{% block title %}Dashboard | PocketSmart AI{% endblock %}
+{% block title %}Executive Dashboard | PocketSmart AI{% endblock %}
 
 {% block content %}
 <!-- User Dashboard Welcome -->
-<div class="hero-banner" style="text-align: left; padding: 32px 36px;">
-    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+<div class="hero-banner" style="text-align: left; padding: 36px 40px; margin-bottom: 36px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
         <div>
-            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
-                <span class="badge badge-success">Active Session: Enterprise FinTech</span>
-                <span class="badge badge-home">Gemini 3.8 Flash Active</span>
+            <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 10px;">
+                <span class="badge badge-success">Authenticated Client Session</span>
+                <span class="badge badge-home">Gemini 3.8 Flash Vision Ready</span>
             </div>
-            <h1 style="font-size: 28px; margin-bottom: 4px;">Welcome back, {{ user.full_name }}! 👋</h1>
-            <p style="margin: 0; font-size: 14px; color: var(--text-secondary);">Manage your household allocations, live trip budgets, room decor plans, and event schedules.</p>
+            <h1 style="font-size: 30px; margin-bottom: 6px; letter-spacing: -0.6px;">Portfolio Console: {{ user.full_name }}</h1>
+            <p style="margin: 0; font-size: 14.5px; color: var(--text-secondary);">Access deterministic cash flow optimization, active project ledgers, interior spatial models, and multimodal styling engines.</p>
         </div>
-        <div style="display: flex; gap: 8px;">
-            <a href="/history" class="btn btn-secondary">📜 Recommendation History</a>
+        <div style="display: flex; gap: 10px;">
+            <a href="/history" class="btn btn-secondary">Review Portfolios</a>
         </div>
     </div>
 </div>
 
 <!-- Quick Launch Cards for All 5 Modules -->
-<h2 style="font-size: 20px; font-weight: 800; margin-bottom: 16px;">Financial & Lifestyle Planners</h2>
-<div class="grid-5" style="margin-bottom: 36px;">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+    <h2 style="font-size: 22px; font-weight: 800; letter-spacing: -0.4px;">Domain Intelligence Suites</h2>
+    <span class="badge badge-budget">5 Engines Online</span>
+</div>
+
+<div class="grid-5" style="margin-bottom: 40px;">
     <!-- Module 1: Household Budget -->
     <div class="glass-card">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-            <span style="font-size: 26px;">📊</span>
-            <span class="badge badge-budget">50/30/20 Math</span>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <span style="font-size: 24px;">📊</span>
+            <span class="badge badge-budget">50/30/20</span>
         </div>
-        <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 6px;">Monthly Budget</h3>
-        <p style="font-size: 12.5px; color: var(--text-secondary); margin-bottom: 14px;">Calculate housing, utilities, groceries, and savings surpluses deterministically.</p>
-        <a href="/monthly-budget" class="btn btn-primary btn-block btn-sm">Manage Budget →</a>
+        <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 6px;">Cash Flow Engine</h3>
+        <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.55; margin-bottom: 16px;">Calculate housing, obligations, discretionary wants, and wealth surpluses.</p>
+        <a href="/monthly-budget" class="btn btn-primary btn-block btn-sm">Launch Cash Flow →</a>
     </div>
 
     <!-- Module 2: Trip Tracker -->
     <div class="glass-card">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-            <span style="font-size: 26px;">✈️</span>
-            <span class="badge badge-trip">Live Tracker</span>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <span style="font-size: 24px;">✈️</span>
+            <span class="badge badge-trip">Project Ledger</span>
         </div>
-        <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 6px;">Trip Tracker</h3>
-        <p style="font-size: 12.5px; color: var(--text-secondary); margin-bottom: 14px;">Log vacation projects, itemize flights & hotels, and track live remaining budget.</p>
-        <a href="/trip-tracker" class="btn btn-primary btn-block btn-sm">Track Trips →</a>
+        <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 6px;">Expedition Ledger</h3>
+        <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.55; margin-bottom: 16px;">Set capital caps, track flights &amp; accommodations, and audit live headroom.</p>
+        <a href="/trip-tracker" class="btn btn-primary btn-block btn-sm">Open Ledgers →</a>
     </div>
 
     <!-- Module 3: Home Interior -->
     <div class="glass-card">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-            <span style="font-size: 26px;">🛋️</span>
-            <span class="badge badge-home">AI Vision</span>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <span style="font-size: 24px;">🛋️</span>
+            <span class="badge badge-home">Spatial Sizing</span>
         </div>
-        <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 6px;">Home Interior</h3>
-        <p style="font-size: 12.5px; color: var(--text-secondary); margin-bottom: 14px;">Room decor, modular furniture, and direct IKEA, Amazon & Flipkart links.</p>
-        <a href="/home-budget" class="btn btn-primary btn-block btn-sm">Plan Home →</a>
+        <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 6px;">Interior Blueprint</h3>
+        <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.55; margin-bottom: 16px;">Multi-room decor breakdowns with direct IKEA, Amazon &amp; Flipkart links.</p>
+        <a href="/home-budget" class="btn btn-primary btn-block btn-sm">Design Blueprint →</a>
     </div>
 
     <!-- Module 4: Party Planner -->
     <div class="glass-card">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-            <span style="font-size: 26px;">🎉</span>
-            <span class="badge badge-party">Event & Food</span>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <span style="font-size: 24px;">🎉</span>
+            <span class="badge badge-party">Hospitality</span>
         </div>
-        <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 6px;">Party Planner</h3>
-        <p style="font-size: 12.5px; color: var(--text-secondary); margin-bottom: 14px;">Guest per-head catering, OYO venues, and Swiggy food orders within budget.</p>
-        <a href="/party-budget" class="btn btn-primary btn-block btn-sm">Plan Event →</a>
+        <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 6px;">Event Hospitality</h3>
+        <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.55; margin-bottom: 16px;">Headcount catering math, OYO venues, and Swiggy food orders within budget.</p>
+        <a href="/party-budget" class="btn btn-primary btn-block btn-sm">Plan Hospitality →</a>
     </div>
 
     <!-- Module 5: Jewelry Stylist -->
     <div class="glass-card">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-            <span style="font-size: 26px;">💎</span>
-            <span class="badge badge-jewelry">Multimodal</span>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <span style="font-size: 24px;">💎</span>
+            <span class="badge badge-jewelry">Gemini Vision</span>
         </div>
-        <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 6px;">Jewelry Stylist</h3>
-        <p style="font-size: 12.5px; color: var(--text-secondary); margin-bottom: 14px;">Outfit image inspection with Tanishq, CaratLane, and Melorra pieces.</p>
-        <a href="/jewelry-budget" class="btn btn-primary btn-block btn-sm">Style Outfit →</a>
+        <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 6px;">Attire Stylist</h3>
+        <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.55; margin-bottom: 16px;">Multimodal outfit analysis with Tanishq, CaratLane, and Melorra pieces.</p>
+        <a href="/jewelry-budget" class="btn btn-primary btn-block btn-sm">Analyze Attire →</a>
     </div>
 </div>
 

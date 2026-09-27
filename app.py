@@ -107,9 +107,16 @@ def get_current_user_optional(request: Request) -> Optional[dict]:
 
 @app.get("/", response_class=HTMLResponse)
 async def home_page(request: Request):
-    """Landing Home Page with hero banner, 5 planner cards, and testimonials."""
+    """Landing Home Page with hero banner, feature breakdowns, and call-to-actions."""
     user = get_current_user_optional(request)
     return templates.TemplateResponse(request=request, name="index.html", context={"user": user})
+
+
+@app.get("/testimonials", response_class=HTMLResponse)
+async def testimonials_page(request: Request):
+    """Testimonials view showcasing user reviews and success stories."""
+    user = get_current_user_optional(request)
+    return templates.TemplateResponse(request=request, name="testimonials.html", context={"user": user})
 
 
 @app.get("/login", response_class=HTMLResponse)

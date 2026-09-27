@@ -8,7 +8,7 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22><text y=%2226%22 font-size=%2226%22>💳</text></svg>">
 </head>
 <body>
-    <!-- Navigation Bar -->
+    <!-- Clean & Modern Navigation Bar -->
     <nav class="navbar">
         <a href="/" class="nav-brand">
             <div class="brand-icon">💳</div>
@@ -20,27 +20,23 @@
 
         <div class="nav-links">
             <a href="/" class="nav-link">🏠 Home</a>
-            <a href="/monthly-budget" class="nav-link">📊 Household Budget</a>
-            <a href="/trip-tracker" class="nav-link">✈️ Trip Tracker</a>
-            <a href="/home-budget" class="nav-link">🛋️ Home Interior</a>
-            <a href="/party-budget" class="nav-link">🎉 Party Planner</a>
-            <a href="/jewelry-budget" class="nav-link">💎 Jewelry Stylist</a>
+            <a href="/testimonials" class="nav-link">💬 Testimonials</a>
             
             {% if user %}
-                <a href="/dashboard" class="nav-link">📈 Dashboard</a>
-                <a href="/history" class="nav-link">📜 History</a>
+                <a href="/dashboard" class="nav-link">📊 User Dashboard</a>
+                <a href="/history" class="nav-link">📜 Saved History</a>
                 <div class="nav-user">
                     <span class="badge badge-success">👤 {{ user.full_name }}</span>
-                    <a href="/logout" class="btn btn-secondary btn-sm">Logout</a>
+                    <a href="/logout" class="btn btn-secondary btn-sm">Sign Out</a>
                 </div>
             {% else %}
-                <a href="/login" class="btn btn-secondary btn-sm">Sign In</a>
+                <a href="/login" class="btn btn-secondary btn-sm">Login</a>
                 <a href="/register" class="btn btn-primary btn-sm">Get Started</a>
             {% endif %}
         </div>
     </nav>
 
-    <!-- Main Content Area -->
+    <!-- Main Page Content Area -->
     <main class="main-container">
         {% block content %}{% endblock %}
     </main>
@@ -53,19 +49,30 @@
                     <div class="brand-icon">💳</div>
                     <div>
                         <div class="brand-title">PocketSmart AI</div>
-                        <div class="brand-subtitle">Intelligent FinTech & Lifestyle Planners</div>
+                        <div class="brand-subtitle">Intelligent FinTech & Lifestyle Assistant</div>
                     </div>
                 </div>
                 <p style="color: var(--text-secondary); font-size: 13.5px; line-height: 1.6; max-width: 340px;">
-                    Empowering households, travelers, event hosts, and shoppers with deterministic budgeting, multimodal vision intelligence, and direct retail integrations.
+                    PocketSmart AI is an end-to-end intelligent budgeting and recommendation assistant, combining deterministic financial math with multimodal visual intelligence.
                 </p>
             </div>
 
             <div class="footer-col">
-                <h4>Core & Lifestyle Planners</h4>
+                <h4>Quick Navigation</h4>
+                <ul>
+                    <li><a href="/">🏠 Home Landing</a></li>
+                    <li><a href="/testimonials">💬 User Testimonials</a></li>
+                    <li><a href="/login">🔐 User Login</a></li>
+                    <li><a href="/register">✨ Create Account</a></li>
+                    <li><a href="/dashboard">📊 User Dashboard</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Integrated Modules</h4>
                 <ul>
                     <li><a href="/monthly-budget">📊 Monthly Household Budget</a></li>
-                    <li><a href="/trip-tracker">✈️ Trip & Vacation Tracker</a></li>
+                    <li><a href="/trip-tracker">✈️ Trip Expense Tracker</a></li>
                     <li><a href="/home-budget">🛋️ Home Interior Planner</a></li>
                     <li><a href="/party-budget">🎉 Party & Event Planner</a></li>
                     <li><a href="/jewelry-budget">💎 Jewelry & Outfit Stylist</a></li>
@@ -73,20 +80,9 @@
             </div>
 
             <div class="footer-col">
-                <h4>Retail & Travel Partners</h4>
-                <ul>
-                    <li><a href="https://www.amazon.in" target="_blank">Amazon & Flipkart</a></li>
-                    <li><a href="https://www.ikea.com" target="_blank">IKEA & Pepperfry</a></li>
-                    <li><a href="https://www.tanishq.co.in" target="_blank">Tanishq & CaratLane</a></li>
-                    <li><a href="https://www.swiggy.com" target="_blank">Swiggy & Zomato</a></li>
-                    <li><a href="https://www.booking.com" target="_blank">Booking.com & OYO</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-col">
-                <h4>Security & Architecture</h4>
+                <h4>Architecture & Security</h4>
                 <p style="color: var(--text-secondary); font-size: 13px; line-height: 1.5; margin-bottom: 12px;">
-                    Powered by FastAPI, SQLite persistence, and Google Gemini Multimodal APIs with deterministic math validation.
+                    Built with FastAPI, SQLite persistence, and Google Gemini Multimodal APIs with secure password encryption.
                 </p>
                 <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                     <span class="badge badge-home">FastAPI 0.141</span>
@@ -97,8 +93,8 @@
         </div>
 
         <div class="footer-bottom">
-            <div>© 2026 PocketSmart AI. All rights reserved. Precision Budgeting & AI Solutions.</div>
-            <div>Built for High-Trust Enterprise & Consumer Financial Planning</div>
+            <div>© 2026 PocketSmart AI. All rights reserved. Precision Budgeting & AI Recommendation Assistant.</div>
+            <div>Designed for Clean User Separation & Modern FinTech UX</div>
         </div>
     </footer>
 </body>

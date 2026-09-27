@@ -63,6 +63,14 @@ def test_login_register_pages():
     assert "Create Account" in r_reg.text or "Get Started" in r_reg.text
 
 
+def test_testimonials_page():
+    """Verifies GET /testimonials returns 200 OK with real reviews."""
+    response = client.get("/testimonials")
+    assert response.status_code == 200
+    assert "Real User Reviews" in response.text
+    assert "Suresh Menon" in response.text
+
+
 def test_registration_and_login_flow():
     """Tests complete registration and subsequent login flow."""
     import uuid
